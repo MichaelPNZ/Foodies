@@ -1,7 +1,10 @@
-package com.example.data.repository
+package com.example.foodies.data.repository
 
 import com.example.data.mapper.toCategory
 import com.example.data.network.ApiService
+import com.example.foodies.data.mapper.toProduct
+import com.example.foodies.data.mapper.toTag
+import com.example.foodies.domain.model.Catalog
 import com.example.foodies.domain.model.Category
 import com.example.foodies.domain.model.Product
 import com.example.foodies.domain.model.Tag
@@ -27,11 +30,38 @@ class ProductRepositoryImpl @Inject constructor(
     }
 
     override fun getTags(): Flow<LoadResource<List<Tag>?>> {
-        TODO("Not yet implemented")
+        return flow {
+            try {
+                val tags = apiService.getTags().map { it.toTag() }
+                emit(LoadResource.Success(tags))
+            } catch (e: Exception) {
+                emit(LoadResource.Error("Ошибка загрузки тагов: ${e.message}"))
+            }
+        }
     }
 
     override fun getProducts(): Flow<LoadResource<List<Product>?>> {
-        TODO("Not yet implemented")
+        return flow {
+            try {
+                val products = apiService.getProducts().map { it.toProduct() }
+                emit(LoadResource.Success(products))
+            } catch (e: Exception) {
+                emit(LoadResource.Error("Ошибка загрузки продуктов: ${e.message}"))
+            }
+        }
+    }
+
+    override fun getCatalog(): Flow<LoadResource<Catalog>?> {
+        return flow {
+            try {
+                val categories = apiService.getCategories().map { it.toCategory() }
+                val products = apiService.getProducts().map { it.toProduct() }
+                val tags = apiService.getTags().map { it.toTag() }
+                emit(LoadResource.Success(Catalog(categories, products, tags)))
+            } catch (e: Exception) {
+                emit(LoadResource.Error("Ошибка загрузки каталога: ${e.message}"))
+            }
+        }
     }
 
 }

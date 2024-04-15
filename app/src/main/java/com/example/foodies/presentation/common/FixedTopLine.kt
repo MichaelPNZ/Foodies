@@ -13,8 +13,8 @@ import androidx.compose.ui.unit.dp
 fun FixedTopLine() {
     Column {
         TopLine()
-        Spacer(modifier = Modifier.size(8.dp))
-        CategoriesRow(categories = listOf("Category 1", "Category 2", "Category 3", "Category 4"))
-        Spacer(modifier = Modifier.size(8.dp))
+//        Spacer(modifier = Modifier.size(8.dp))
+//        CategoriesRow(categories = listOf("Category 1", "Category 2", "Category 3", "Category 4"))
+//        Spacer(modifier = Modifier.size(8.dp))
     }
 }

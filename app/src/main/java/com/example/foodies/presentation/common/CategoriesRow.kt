@@ -15,23 +15,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.foodies.domain.model.Category
 import com.example.foodies.presentation.theme.Dark
 import com.example.foodies.presentation.theme.Primary
 
 @Composable
-@Preview(showBackground = true)
-fun ButtonPreview() {
-    CategoriesRow(
-        categories = listOf("Category 1", "Category 2", "Category 3")
-    )
-}
-
-@Composable
 fun CategoriesRow(
-    categories: List<String>,
+    categories: List<Category>,
 ) {
     val isSelected = remember { mutableStateOf(true) }
 
@@ -54,7 +46,7 @@ fun CategoriesRow(
                     .height(40.dp),
             ) {
                 Text(
-                    text = categories[category],
+                    text = categories[category].name,
                     color = if (isSelected.value) Color.White else Dark
                     ,
                     fontSize = 16.sp,
