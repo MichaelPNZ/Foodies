@@ -1,6 +1,7 @@
 package com.example.foodies.presentation.common
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -16,37 +17,47 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.foodies.domain.model.Product
+import com.example.foodies.presentation.catalog_screen.CatalogScreenViewModel
 import com.example.foodies.presentation.theme.Dark
 import com.example.foodies.utils.Constants
 
-@Preview
 @Composable
-fun AddToCartButton() {
+fun AddToCartButton(
+    product: Product,
+    viewModel: CatalogScreenViewModel,
+) {
     Box(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .background(Color.White, RoundedCornerShape(8.dp))
-            .padding(12.dp),
+            .padding(12.dp)
+            .clickable {
+                viewModel.addToShoppingCart(product)
+            },
         contentAlignment = Alignment.Center
     ) {
         Row(
             horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "480 ${Constants.RUR}",
+                text = "${product.priceCurrent} ${Constants.RUR}",
                 color = Dark,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold
             )
-            Text(
-                modifier = Modifier.alpha(0.6f),
-                text = "480 ${Constants.RUR}",
-                color = Dark,
-                fontSize = 16.sp,
-                style = TextStyle(textDecoration = TextDecoration.LineThrough)
-            )
+            if (product.priceOld != 0) {
+                Text(
+                    modifier = Modifier.alpha(0.6f),
+                    text = "${product.priceOld} ${Constants.RUR}",
+                    color = Dark,
+                    fontSize = 16.sp,
+                    style = TextStyle(textDecoration = TextDecoration.LineThrough)
+                )
+            }
         }
     }
 }

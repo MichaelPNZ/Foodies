@@ -9,13 +9,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.foodies.R
 
-@Preview(showBackground = true)
 @Composable
-fun TopLine() {
+fun TopLine(
+    filterClickAction: () -> Unit
+) {
     Row(
         modifier = Modifier.fillMaxWidth()
             .padding(start = 8.dp, end = 8.dp, top = 16.dp)
@@ -23,7 +23,7 @@ fun TopLine() {
         Image(
             modifier = Modifier.size(44.dp)
                 .padding(10.dp)
-                .clickable {  },
+                .clickable { filterClickAction() },
             painter = painterResource(id = R.drawable.filter),
             contentDescription = null
         )

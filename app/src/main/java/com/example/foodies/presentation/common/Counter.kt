@@ -6,6 +6,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
@@ -15,16 +16,22 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.foodies.R
+import com.example.foodies.domain.model.Product
+import com.example.foodies.presentation.catalog_screen.CatalogScreenViewModel
 import com.example.foodies.presentation.theme.Primary
 
-@Preview
 @Composable
-fun Counter() {
+fun Counter(
+    product: Product,
+    viewModel: CatalogScreenViewModel,
+) {
     Row(
-        modifier = Modifier.background(Color.Transparent),
+        modifier = Modifier
+            .background(Color.Transparent)
+            .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(12.dp),
     ) {
         Box(
@@ -33,7 +40,7 @@ fun Counter() {
             Image(
                 modifier = Modifier
                     .padding(8.dp)
-                    .clickable { },
+                    .clickable { viewModel.deleteFromShoppingCart(product) },
                 painter = painterResource(id = R.drawable.minus),
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(Primary)
@@ -41,9 +48,12 @@ fun Counter() {
         }
 
         Text(
-            modifier = Modifier.padding(horizontal = 12.dp)
-                .align(Alignment.CenterVertically),
-            text = "100",
+            modifier = Modifier
+                .padding(horizontal = 12.dp)
+                .align(Alignment.CenterVertically)
+                .weight(1f),
+            text = viewModel.getProductCount(product).toString(),
+            textAlign = TextAlign.Center,
             color = Color.Black,
         )
 
@@ -53,7 +63,7 @@ fun Counter() {
             Image(
                 modifier = Modifier
                     .padding(8.dp)
-                    .clickable { },
+                    .clickable { viewModel.addToShoppingCart(product) },
                 painter = painterResource(id = R.drawable.plus),
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(Primary)

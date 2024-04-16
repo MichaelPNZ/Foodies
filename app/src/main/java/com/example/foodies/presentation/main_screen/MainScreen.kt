@@ -1,6 +1,7 @@
 package com.example.foodies.presentation.main_screen
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -17,18 +18,22 @@ import com.example.foodies.presentation.common.TopLine
 fun MainScreen() {
     val navController = rememberNavController()
 
+    Box(modifier = Modifier.fillMaxSize()) {
+        Navigation(
+            navController = navController
+        )
+    }
 
-
-    Scaffold(
-        topBar = { TopLine() },
-        content = { padding ->
-            Box(modifier = Modifier.padding(padding)) {
-                Navigation(
-                    navController = navController
-                )
-            }
-        },
-    )
+//    Scaffold(
+//        topBar = { TopLine() },
+//        content = { padding ->
+//            Box(modifier = Modifier.padding(padding)) {
+//                Navigation(
+//                    navController = navController
+//                )
+//            }
+//        },
+//    )
 }
 
 @Composable

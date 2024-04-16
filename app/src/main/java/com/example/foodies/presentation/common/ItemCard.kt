@@ -2,9 +2,11 @@ package com.example.foodies.presentation.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -20,19 +22,45 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.foodies.R
 import com.example.foodies.domain.model.Product
+import com.example.foodies.presentation.catalog_screen.CatalogScreenViewModel
 import com.example.foodies.presentation.theme.GrayBg
 
 @Composable
-fun ItemCard(product: Product) {
+fun ItemCard(
+    product: Product,
+    viewModel: CatalogScreenViewModel,
+) {
     Card(
         colors = CardDefaults.cardColors(containerColor = GrayBg),
     ) {
-        Image(
-            modifier = Modifier.fillMaxWidth()
-                .aspectRatio(1f),
-            painter = painterResource(id = R.drawable.mock_photo),
-            contentDescription = null,
-        )
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .aspectRatio(1f)
+        ) {
+            Image(
+                modifier = Modifier
+                    .fillMaxSize(),
+                painter = painterResource(id = R.drawable.mock_photo),
+                contentDescription = null,
+            )
+            if (product.tagIds.isNotEmpty()) {
+                Image(
+                    modifier = Modifier
+                        .size(24.dp)
+                        .padding(start = 8.dp, top = 8.dp),
+                    painter = painterResource(
+                        id = when (product.tagIds) {
+                            listOf(2) -> R.drawable.type_without_meat
+                            listOf(4) -> R.drawable.type_spicy
+                            else -> R.drawable.type_sale
+                        }
+                    ),
+                    contentDescription = null,
+                )
+            }
+        }
+
         Spacer(modifier = Modifier.size(12.dp))
         Column(
             modifier = Modifier
@@ -58,7 +86,17 @@ fun ItemCard(product: Product) {
                     lineHeight = 20.sp
                 )
             }
-            AddToCartButton()
+            if (viewModel.shoppingCart.value.find { it.product == product } != null) {
+                Counter(
+                    product = product,
+                    viewModel = viewModel
+                )
+            } else {
+                AddToCartButton(
+                    product = product,
+                    viewModel = viewModel
+                )
+            }
         }
     }
 }

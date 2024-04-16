@@ -10,35 +10,31 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.foodies.domain.model.Category
+import com.example.foodies.presentation.catalog_screen.CatalogScreenViewModel
 import com.example.foodies.presentation.theme.Dark
 import com.example.foodies.presentation.theme.Primary
 
 @Composable
 fun CategoriesRow(
     categories: List<Category>,
+    viewModel: CatalogScreenViewModel,
 ) {
-    val isSelected = remember { mutableStateOf(true) }
-
     LazyRow(
-        modifier = Modifier.padding(start = 16.dp),
+        modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 8.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),) {
         items(categories.size) { category ->
             Button(
                 onClick = {
-                          isSelected.value = !isSelected.value
-//                    viewModel.changeCategory(category)
+                    viewModel.changeCategory(categories[category].id)
                 },
                 colors = ButtonDefaults.buttonColors(
-                    if (isSelected.value) Primary else Color.White
-//                    if (viewModel.isSelectCheck(category)) PurplePrimary else GreyLighter
+                    if (viewModel.categoryId.value == categories[category].id) Primary else Color.White
                 ),
                 shape = RoundedCornerShape(8.dp),
                 modifier = Modifier
@@ -47,8 +43,9 @@ fun CategoriesRow(
             ) {
                 Text(
                     text = categories[category].name,
-                    color = if (isSelected.value) Color.White else Dark
-                    ,
+                    color =
+                    if (viewModel.categoryId.value == categories[category].id) Color.White
+                    else Dark,
                     fontSize = 16.sp,
                     textAlign = TextAlign.Center,
                 )
