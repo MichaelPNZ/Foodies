@@ -9,8 +9,6 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,19 +16,23 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.foodies.domain.model.Tag
+import com.example.foodies.presentation.catalog_screen.CatalogScreenViewModel
 import com.example.foodies.presentation.theme.Primary
 
 @Composable
 fun FilterItem(
-    filterName: String,
+    tag: Tag,
+    viewModel: CatalogScreenViewModel,
 ) {
-    val (checkedState, onStateChange) = remember { mutableStateOf(false) }
     Row(
         Modifier
             .fillMaxWidth()
             .toggleable(
-                value = checkedState,
-                onValueChange = { onStateChange(!checkedState) },
+                value = viewModel.selectedTagList.value.contains(tag),
+                onValueChange = {
+                    viewModel.checkedSelectedTagList(tag)
+                },
                 role = Role.Checkbox
             )
             .padding(vertical = 12.dp),
@@ -38,7 +40,7 @@ fun FilterItem(
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Text(
-            text = filterName,
+            text = tag.name,
             fontWeight = FontWeight.Normal,
             fontSize = 16.sp,
             lineHeight = 24.sp,
@@ -46,7 +48,7 @@ fun FilterItem(
         )
 
         Checkbox(
-            checked = checkedState,
+            checked = viewModel.selectedTagList.value.contains(tag),
             onCheckedChange = null,
             colors = CheckboxDefaults.colors(
                 checkedColor = Primary,

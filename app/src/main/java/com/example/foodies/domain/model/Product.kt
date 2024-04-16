@@ -1,5 +1,9 @@
 package com.example.foodies.domain.model
 
+import android.os.Parcelable
+import kotlinx.parcelize.Parcelize
+
+@Parcelize
 data class Product(
     val id: Int,
     val categoryId: Int,
@@ -15,4 +19,4 @@ data class Product(
     val fatsPer100Grams: Double,
     val carbohydratesPer100Grams: Double,
     val tagIds: List<Int>
-)
+) : Parcelable

@@ -10,8 +10,6 @@ import com.example.foodies.domain.model.Product
 import com.example.foodies.domain.model.ShoppingCart
 import com.example.foodies.domain.model.Tag
 import com.example.foodies.domain.usecases.GetCatalogUseCase
-import com.example.foodies.domain.usecases.GetCategoriesUseCase
-import com.example.foodies.domain.usecases.GetProductsUseCase
 import com.example.foodies.utils.LoadResource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -21,8 +19,6 @@ import javax.inject.Inject
 
 @HiltViewModel
 class CatalogScreenViewModel @Inject constructor(
-    private val getCategoriesUseCase: GetCategoriesUseCase,
-    private val getProductsUseCase: GetProductsUseCase,
     private val getCatalogUseCase: GetCatalogUseCase,
 ) : ViewModel() {
 
@@ -37,6 +33,10 @@ class CatalogScreenViewModel @Inject constructor(
     private val _tagList: MutableState<List<Tag>> =
         mutableStateOf(emptyList())
     val tagList: State<List<Tag>> = _tagList
+
+    private val _selectedTagList: MutableState<List<Tag>> =
+        mutableStateOf(emptyList())
+    val selectedTagList: State<List<Tag>> = _selectedTagList
 
     fun catalogState(): Flow<CatalogScreenState> {
         return getCatalogUseCase()
@@ -58,6 +58,15 @@ class CatalogScreenViewModel @Inject constructor(
                 }
             }
             .onStart { emit(CatalogScreenState.Loading) }
+    }
+
+    fun getFilteredProductList(currentProductList: List<Product>) : List<Product> {
+        return if (_selectedTagList.value.isEmpty()) {
+            currentProductList.filter { it.categoryId == _categoryId.value }
+        } else {
+            currentProductList.filter { it.categoryId == _categoryId.value }
+                .filter { product -> product.tagIds.containsAll(_selectedTagList.value.map { it.id }) }
+        }
     }
 
     fun changeCategory(id: Int) {
@@ -102,5 +111,13 @@ class CatalogScreenViewModel @Inject constructor(
 
     fun getSum(): Int {
         return _shoppingCart.value.sumOf { it.product.priceCurrent * it.count }
+    }
+
+    fun checkedSelectedTagList(tag: Tag) {
+        if (_selectedTagList.value.contains(tag)) {
+            _selectedTagList.value -= tag
+        } else {
+            _selectedTagList.value += tag
+        }
     }
 }

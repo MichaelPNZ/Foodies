@@ -1,6 +1,7 @@
 package com.example.foodies.presentation.common
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,6 +30,7 @@ import com.example.foodies.presentation.theme.GrayBg
 fun ItemCard(
     product: Product,
     viewModel: CatalogScreenViewModel,
+    navigateToDetail: (Product) -> Unit,
 ) {
     Card(
         colors = CardDefaults.cardColors(containerColor = GrayBg),
@@ -37,6 +39,7 @@ fun ItemCard(
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
+                .clickable { navigateToDetail(product) }
         ) {
             Image(
                 modifier = Modifier

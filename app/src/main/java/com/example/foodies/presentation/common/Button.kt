@@ -38,13 +38,15 @@ fun Button(
                 .padding(horizontal = 16.dp, vertical = 14.dp),
             horizontalArrangement = Arrangement.Center
         ) {
-            Image(
-                modifier = Modifier.size(24.dp)
-                    .padding(end = 8.dp),
-                painter = painterResource(id = R.drawable.cart),
-                contentDescription = null,
-                colorFilter = ColorFilter.tint(Color.White)
-            )
+            if (!sum.startsWith("В корзину за")) {
+                Image(
+                    modifier = Modifier.size(24.dp)
+                        .padding(end = 8.dp),
+                    painter = painterResource(id = R.drawable.cart),
+                    contentDescription = null,
+                    colorFilter = ColorFilter.tint(Color.White)
+                )
+            }
             Text(
                 text = "$sum ${Constants.RUR}",
                 fontSize = 16.sp,
