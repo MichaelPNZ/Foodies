@@ -1,5 +1,6 @@
 package com.example.foodies.presentation.common
 
+import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,6 +37,8 @@ fun AddToCartButton(
             .padding(12.dp)
             .clickable {
                 viewModel.addToShoppingCart(product)
+                Log.i("!!!", "${viewModel.shoppingCart.value}")
+
             },
         contentAlignment = Alignment.Center
     ) {

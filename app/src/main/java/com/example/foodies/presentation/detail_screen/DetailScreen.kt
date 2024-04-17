@@ -1,14 +1,21 @@
 package com.example.foodies.presentation.detail_screen
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
@@ -18,27 +25,30 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.foodies.R
 import com.example.foodies.domain.model.Product
 import com.example.foodies.presentation.catalog_screen.CatalogScreenViewModel
-import com.example.foodies.presentation.common.Button
 import com.example.foodies.presentation.common.Counter
 import com.example.foodies.presentation.common.ListItem
 import com.example.foodies.presentation.theme.Dark
+import com.example.foodies.presentation.theme.Primary
+import com.example.foodies.utils.Constants
 
 @Composable
 fun DetailScreen(
     product: Product,
     viewModel: CatalogScreenViewModel = hiltViewModel(),
-    onBackClick: () -> Unit,
+    navigateBack: () -> Unit,
 ) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White),
+            .background(Color.White)
+            .verticalScroll(rememberScrollState()),
         verticalArrangement = Arrangement.spacedBy(24.dp)
     ) {
         Box(
@@ -53,7 +63,7 @@ fun DetailScreen(
                 contentDescription = null,
             )
             IconButton(
-                onClick = { onBackClick() }) {
+                onClick = { navigateBack() }) {
                 Image(
                     painter = painterResource(id = R.drawable.arrow_left),
                     contentDescription = null,
@@ -124,7 +134,38 @@ fun DetailScreen(
                 viewModel = viewModel
             )
         } else {
-            Button(sum = "В корзину за ${product.priceCurrent}")
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp)
+                    .background(Primary, RoundedCornerShape(8.dp))
+                    .clickable {
+                        viewModel.addToShoppingCart(product)
+                        Log.i("!!!", "${viewModel.shoppingCart.value}")
+                    }
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp, vertical = 14.dp),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Image(
+                        modifier = Modifier.size(24.dp)
+                            .padding(end = 8.dp),
+                        painter = painterResource(id = R.drawable.cart),
+                        contentDescription = null,
+                        colorFilter = ColorFilter.tint(Color.White)
+                    )
+
+                    Text(
+                        text = "${product.priceCurrent} ${Constants.RUR}",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color.White
+                    )
+                }
+            }
         }
     }
 }

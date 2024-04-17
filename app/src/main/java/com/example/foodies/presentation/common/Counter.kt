@@ -1,5 +1,6 @@
 package com.example.foodies.presentation.common
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -40,7 +41,10 @@ fun Counter(
             Image(
                 modifier = Modifier
                     .padding(8.dp)
-                    .clickable { viewModel.deleteFromShoppingCart(product) },
+                    .clickable {
+                        viewModel.deleteFromShoppingCart(product)
+                        Log.i("!!!", "${viewModel.shoppingCart.value}")
+                    },
                 painter = painterResource(id = R.drawable.minus),
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(Primary)
@@ -63,7 +67,11 @@ fun Counter(
             Image(
                 modifier = Modifier
                     .padding(8.dp)
-                    .clickable { viewModel.addToShoppingCart(product) },
+                    .clickable {
+                        viewModel.addToShoppingCart(product)
+                        Log.i("!!!", "${viewModel.shoppingCart.value}")
+
+                    },
                 painter = painterResource(id = R.drawable.plus),
                 contentDescription = null,
                 colorFilter = ColorFilter.tint(Primary)

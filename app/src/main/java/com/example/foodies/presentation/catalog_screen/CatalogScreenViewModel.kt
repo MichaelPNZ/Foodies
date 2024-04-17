@@ -1,6 +1,5 @@
 package com.example.foodies.presentation.catalog_screen
 
-import android.util.Log
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
@@ -22,12 +21,10 @@ class CatalogScreenViewModel @Inject constructor(
     private val getCatalogUseCase: GetCatalogUseCase,
 ) : ViewModel() {
 
-    private val _categoryId: MutableState<Int> =
-        mutableIntStateOf(0)
+    private val _categoryId = mutableIntStateOf(0)
     val categoryId: State<Int> = _categoryId
 
-    private val _shoppingCart: MutableState<List<ShoppingCart>> =
-        mutableStateOf(emptyList())
+    private val _shoppingCart = mutableStateOf(emptyList<ShoppingCart>())
     val shoppingCart: State<List<ShoppingCart>> = _shoppingCart
 
     private val _tagList: MutableState<List<Tag>> =
@@ -43,7 +40,7 @@ class CatalogScreenViewModel @Inject constructor(
             .map { result ->
                 when (result) {
                     is LoadResource.Success -> {
-                        _categoryId.value = result.data?.categoryList?.first()?.id ?:0
+                        _categoryId.intValue = result.data?.categoryList?.first()?.id ?:0
                         _tagList.value = result.data?.tagList ?: emptyList()
                         CatalogScreenState.CatalogState(catalog = result.data)
                     }
@@ -62,15 +59,15 @@ class CatalogScreenViewModel @Inject constructor(
 
     fun getFilteredProductList(currentProductList: List<Product>) : List<Product> {
         return if (_selectedTagList.value.isEmpty()) {
-            currentProductList.filter { it.categoryId == _categoryId.value }
+            currentProductList.filter { it.categoryId == _categoryId.intValue }
         } else {
-            currentProductList.filter { it.categoryId == _categoryId.value }
+            currentProductList.filter { it.categoryId == _categoryId.intValue }
                 .filter { product -> product.tagIds.containsAll(_selectedTagList.value.map { it.id }) }
         }
     }
 
     fun changeCategory(id: Int) {
-        _categoryId.value = id
+        _categoryId.intValue = id
     }
 
     fun addToShoppingCart(product: Product) {
@@ -86,7 +83,6 @@ class CatalogScreenViewModel @Inject constructor(
             _shoppingCart.value + ShoppingCart(product, 1)
         }
         _shoppingCart.value = updatedShoppingCart
-        Log.i("!!!", "$_shoppingCart")
     }
 
     fun deleteFromShoppingCart(product: Product) {
@@ -102,7 +98,6 @@ class CatalogScreenViewModel @Inject constructor(
             _shoppingCart.value - ShoppingCart(product, 1)
         }
         _shoppingCart.value = updatedShoppingCart
-        Log.i("!!!", "$_shoppingCart")
     }
 
     fun getProductCount(product: Product): Int {
