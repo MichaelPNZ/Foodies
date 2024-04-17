@@ -1,6 +1,6 @@
 package com.example.foodies.data.repository
 
-import com.example.data.mapper.toCategory
+import com.example.foodies.data.mapper.toCategory
 import com.example.data.network.ApiService
 import com.example.domain.model.Catalog
 import com.example.domain.model.Category
