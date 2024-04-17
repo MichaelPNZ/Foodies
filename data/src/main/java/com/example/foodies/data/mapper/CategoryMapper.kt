@@ -1,6 +1,6 @@
 package com.example.data.mapper
 
-import com.example.data.network.dto.CategoryDTO
+import com.example.foodies.data.network.dto.CategoryDTO
 import com.example.domain.model.Category
 
 fun CategoryDTO.toCategory(): Category {

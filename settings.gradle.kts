@@ -23,3 +23,5 @@ rootProject.name = "Foodies"
 include(":app")
 include(":domain")
 include(":utils")
+include(":data")
+include(":presentation")

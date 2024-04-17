@@ -1,6 +1,6 @@
 package com.example.data.network
 
-import com.example.data.network.dto.CategoryDTO
+import com.example.foodies.data.network.dto.CategoryDTO
 import com.example.data.network.dto.ProductDTO
 import com.example.data.network.dto.TagDTO
 import retrofit2.http.GET

@@ -1,4 +1,4 @@
-package com.example.data.network.dto
+package com.example.foodies.data.network.dto
 
 import com.google.gson.annotations.SerializedName
 

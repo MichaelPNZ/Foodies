@@ -14,5 +14,5 @@ interface RepositoryModule {
 
     @Binds
     @Singleton
-    fun bindProductRepository(impl: ProductRepositoryImpl): ProductRepository
+    fun bindProductRepository(impl: com.example.foodies.data.repository.ProductRepositoryImpl): ProductRepository
 }
