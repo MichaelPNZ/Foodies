@@ -1,7 +1,7 @@
 package com.example.foodies.data.mapper
 
 import com.example.data.network.dto.ProductDTO
-import com.example.foodies.domain.model.Product
+import com.example.domain.model.Product
 
 fun ProductDTO.toProduct(): Product {
     return Product(

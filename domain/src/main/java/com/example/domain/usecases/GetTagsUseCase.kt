@@ -1,6 +1,6 @@
-package com.example.foodies.domain.usecases
+package com.example.domain.usecases
 
-import com.example.foodies.domain.repository.ProductRepository
+import com.example.domain.repository.ProductRepository
 import javax.inject.Inject
 
 class GetTagsUseCase @Inject constructor(

@@ -1,4 +1,4 @@
-package com.example.foodies.utils
+package com.example.utils
 
 sealed class LoadResource<T>(val data: T? = null, val message: String? = null) {
     class Success<T>(data: T?) : LoadResource<T>(data)

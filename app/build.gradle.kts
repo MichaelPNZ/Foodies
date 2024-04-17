@@ -53,6 +53,9 @@ android {
 }
 
 dependencies {
+    implementation(project(":domain"))
+    implementation(project(":utils"))
+
     // viewModel
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     //Retrofit

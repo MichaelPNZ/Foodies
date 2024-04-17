@@ -2,14 +2,14 @@ package com.example.foodies.data.repository
 
 import com.example.data.mapper.toCategory
 import com.example.data.network.ApiService
+import com.example.domain.model.Catalog
+import com.example.domain.model.Category
+import com.example.domain.model.Product
+import com.example.domain.model.Tag
+import com.example.domain.repository.ProductRepository
 import com.example.foodies.data.mapper.toProduct
 import com.example.foodies.data.mapper.toTag
-import com.example.foodies.domain.model.Catalog
-import com.example.foodies.domain.model.Category
-import com.example.foodies.domain.model.Product
-import com.example.foodies.domain.model.Tag
-import com.example.foodies.domain.repository.ProductRepository
-import com.example.foodies.utils.LoadResource
+import com.example.utils.LoadResource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -57,7 +57,14 @@ class ProductRepositoryImpl @Inject constructor(
                 val categories = apiService.getCategories().map { it.toCategory() }
                 val products = apiService.getProducts().map { it.toProduct() }
                 val tags = apiService.getTags().map { it.toTag() }
-                emit(LoadResource.Success(Catalog(categories, products, tags)))
+                emit(
+                    LoadResource.Success(
+                    Catalog(
+                        categories,
+                        products,
+                        tags
+                    )
+                ))
             } catch (e: Exception) {
                 emit(LoadResource.Error("Ошибка загрузки каталога: ${e.message}"))
             }

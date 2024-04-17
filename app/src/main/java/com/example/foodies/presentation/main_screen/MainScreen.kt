@@ -14,7 +14,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.foodies.domain.model.Product
+import com.example.domain.model.Product
 import com.example.foodies.navigation.BottomNavigationBar
 import com.example.foodies.navigation.NavigationItem
 import com.example.foodies.navigation.NavigationObject

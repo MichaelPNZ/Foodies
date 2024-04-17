@@ -16,7 +16,7 @@ import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.foodies.domain.model.Tag
+import com.example.domain.model.Tag
 import com.example.foodies.presentation.catalog_screen.CatalogScreenViewModel
 import com.example.foodies.presentation.theme.Primary
 

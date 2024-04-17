@@ -19,8 +19,8 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.domain.model.Product
 import com.example.foodies.R
-import com.example.foodies.domain.model.Product
 import com.example.foodies.presentation.catalog_screen.CatalogScreenViewModel
 import com.example.foodies.presentation.theme.Primary
 
