@@ -9,6 +9,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -16,6 +17,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.presentation.account_screen.AccountScreen
 import com.example.presentation.catalog_screen.CatalogScreen
+import com.example.presentation.catalog_screen.CatalogScreenViewModel
 import com.example.presentation.detail_screen.DetailScreen
 import com.example.presentation.favorite_screen.FavoriteScreen
 import com.example.presentation.navigation.BottomNavigationBar
@@ -53,11 +55,12 @@ fun MainScreen() {
 
 @Composable
 fun Navigation(navController: NavHostController) {
-
+    val viewModel: CatalogScreenViewModel = hiltViewModel()
     NavHost(navController, startDestination = NavigationItem.CatalogScreen.route) {
-
         composable(NavigationItem.CatalogScreen.route) {
+
             CatalogScreen(
+                viewModel = viewModel,
                 navigateToDetail = {
                     navController.currentBackStackEntry?.savedStateHandle?.set("id", it)
                     navController.navigate(NavigationObject.DetailScreen.route)
@@ -69,7 +72,10 @@ fun Navigation(navController: NavHostController) {
             val id =
                 navController.previousBackStackEntry?.savedStateHandle?.get<Int>("id")
             if (id != null) {
-                DetailScreen(id) {
+                DetailScreen(
+                    id,
+                    viewModel = viewModel
+                ) {
                     navController.navigateUp()
                 }
             }

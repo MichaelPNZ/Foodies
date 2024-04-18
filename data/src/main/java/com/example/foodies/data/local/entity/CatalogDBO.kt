@@ -52,4 +52,15 @@ class StringListConverter {
     fun toTagList(list: List<Tag>): String {
         return Gson().toJson(list)
     }
+
+    @TypeConverter
+    fun fromProduct(value: String): Product {
+        val product = object : TypeToken<Product>() {}.type
+        return Gson().fromJson(value, product)
+    }
+
+    @TypeConverter
+    fun toProduct(product: Product): String {
+        return Gson().toJson(product)
+    }
 }

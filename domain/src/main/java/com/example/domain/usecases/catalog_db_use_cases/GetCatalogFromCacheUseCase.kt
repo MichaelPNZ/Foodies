@@ -1,4 +1,4 @@
-package com.example.domain.usecases
+package com.example.domain.usecases.catalog_db_use_cases
 
 import com.example.domain.repository.CatalogDBRepository
 import javax.inject.Inject

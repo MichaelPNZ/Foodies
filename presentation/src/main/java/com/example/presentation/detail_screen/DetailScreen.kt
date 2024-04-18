@@ -11,11 +11,13 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
@@ -28,23 +30,24 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.domain.model.Product
 import com.example.presentation.R
 import com.example.presentation.catalog_screen.CatalogScreenViewModel
-import com.example.presentation.common.Counter
 import com.example.presentation.common.ListItem
 import com.example.presentation.theme.Dark
 import com.example.presentation.theme.Primary
-
+import com.example.utils.Constants
 
 @Composable
 fun DetailScreen(
     id: Int,
-    viewModel: CatalogScreenViewModel = hiltViewModel(),
+    viewModel: CatalogScreenViewModel,
     navigateBack: () -> Unit,
 ) {
     viewModel.getProduct(id)
@@ -136,43 +139,33 @@ fun DetailScreen(
                 )
             }
             if (viewModel.shoppingCart.value.find { it.product == selectedProduct } != null) {
-                Counter(
+                CounterBig(
                     product = selectedProduct!!,
                     viewModel = viewModel
                 )
             } else {
-                Box(
+                Button(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 12.dp)
-                        .background(Primary, RoundedCornerShape(8.dp))
-                        .clickable {
-                            viewModel.addToShoppingCart(selectedProduct!!)
-                            Log.i("!!!", "${viewModel.shoppingCart.value}")
-                        }
-                ) {
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 16.dp, vertical = 14.dp),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Image(
-                            modifier = Modifier
-                                .size(24.dp)
-                                .padding(end = 8.dp),
-                            painter = painterResource(id = R.drawable.cart),
-                            contentDescription = null,
-                            colorFilter = ColorFilter.tint(Color.White)
-                        )
-
-                        Text(
-                            text = "${selectedProduct!!.priceCurrent} ${com.example.utils.Constants.RUR}",
-                            fontSize = 16.sp,
-                            fontWeight = FontWeight.Medium,
-                            color = Color.White
-                        )
+                        .padding(horizontal = 16.dp, vertical = 12.dp),
+                    shape = RoundedCornerShape(8.dp),
+                    colors = ButtonColors(
+                        containerColor = Primary,
+                        contentColor = Color.White,
+                        disabledContainerColor = Color.Gray,
+                        disabledContentColor = Color.White
+                    ),
+                    onClick = {
+                        viewModel.addToShoppingCart(selectedProduct!!)
+                        Log.i("!!!", "${viewModel.shoppingCart.value}")
                     }
+                ) {
+                    Text(
+                        text = "В корзину за ${selectedProduct!!.priceCurrent} ${Constants.RUR}",
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = Color.White
+                    )
                 }
             }
         }
@@ -186,6 +179,70 @@ fun DetailScreen(
             CircularProgressIndicator()
         }
     }
+}
 
+@Composable
+fun CounterBig(
+    product: Product,
+    viewModel: CatalogScreenViewModel,
+) {
+    Row(
+        modifier = Modifier
+            .background(Color.Transparent)
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
+        Box(
+            modifier = Modifier.height(50.dp)
+                .aspectRatio(1f)
+                .background(Color.White, RoundedCornerShape(8.dp)
+            )
+        ) {
+            Image(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable {
+                        viewModel.deleteFromShoppingCart(product)
+                        Log.i("!!!", "${viewModel.shoppingCart.value}")
+                    },
+                painter = painterResource(id = R.drawable.minus),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                colorFilter = ColorFilter.tint(Primary)
+            )
+        }
 
+        Text(
+            modifier = Modifier
+                .padding(horizontal = 12.dp)
+                .align(Alignment.CenterVertically)
+                .weight(1f),
+            text = viewModel.getProductCount(product).toString(),
+            fontSize = 18.sp,
+            fontWeight = FontWeight.Medium,
+            textAlign = TextAlign.Center,
+            color = Color.Black,
+        )
+
+        Box(
+            modifier = Modifier.height(50.dp)
+                .aspectRatio(1f)
+                .background(Color.White, RoundedCornerShape(8.dp))
+        ) {
+            Image(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable {
+                        viewModel.addToShoppingCart(product)
+                        Log.i("!!!", "${viewModel.shoppingCart.value}")
+
+                    },
+                painter = painterResource(id = R.drawable.plus),
+                contentDescription = null,
+                contentScale = ContentScale.Crop,
+                colorFilter = ColorFilter.tint(Primary)
+            )
+        }
+    }
 }
