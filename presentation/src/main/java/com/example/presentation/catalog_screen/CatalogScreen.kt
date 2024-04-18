@@ -49,7 +49,7 @@ fun CatalogScreen(
     navigateToDetail: (id: Int) -> Unit
 ) {
     val categoriesState =
-        viewModel.catalogState().collectAsStateWithLifecycle(CatalogScreenState.Initial)
+        viewModel.catalogState.collectAsStateWithLifecycle(CatalogScreenState.Initial)
 
     CatalogScreenContent(
         categoriesState = categoriesState,

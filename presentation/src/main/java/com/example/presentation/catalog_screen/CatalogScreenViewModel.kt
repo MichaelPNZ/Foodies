@@ -20,8 +20,6 @@ import com.example.domain.usecases.shopping_cart_db_use_cases.InsertProductToCac
 import com.example.domain.usecases.shopping_cart_db_use_cases.InsertShoppingCartToCacheUseCase
 import com.example.utils.LoadResource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.launch
@@ -59,34 +57,29 @@ class CatalogScreenViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            while (true) {
-                _shoppingCart.value = getShoppingCartFromCacheUseCase() ?: emptyList()
-                delay(1000)
-            }
+            _shoppingCart.value = getShoppingCartFromCacheUseCase() ?: emptyList()
         }
     }
 
-    fun catalogState(): Flow<CatalogScreenState> {
-        return getCatalogUseCase()
-            .map { result ->
-                when (result) {
-                    is LoadResource.Success -> {
-                        result.data?.let { insertCatalogToCache(it) }
-                        _categoryId.intValue = result.data?.categoryList?.first()?.id ?:0
-                        _tagList.value = result.data?.tagList ?: emptyList()
-                        CatalogScreenState.CatalogState(catalog = result.data)
-                    }
-                    is LoadResource.Error -> {
-                        CatalogScreenState.Error
-                    }
-                    is LoadResource.Loading -> {
-                        CatalogScreenState.Loading
-                    }
-                    null -> TODO()
+    val catalogState = getCatalogUseCase()
+        .map { result ->
+            when (result) {
+                is LoadResource.Success -> {
+                    result.data?.let { insertCatalogToCache(it) }
+                    _categoryId.intValue = result.data?.categoryList?.first()?.id ?:0
+                    _tagList.value = result.data?.tagList ?: emptyList()
+                    CatalogScreenState.CatalogState(catalog = result.data)
                 }
+                is LoadResource.Error -> {
+                    CatalogScreenState.Error
+                }
+                is LoadResource.Loading -> {
+                    CatalogScreenState.Loading
+                }
+                null -> TODO()
             }
-            .onStart { emit(CatalogScreenState.Loading) }
-    }
+        }
+        .onStart { emit(CatalogScreenState.Loading) }
 
     fun getFilteredProductList(currentProductList: List<Product>) : List<Product> {
         return if (_selectedTagList.value.isEmpty()) {
