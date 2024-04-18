@@ -2,6 +2,7 @@ package com.example.presentation.common
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
@@ -19,18 +20,21 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.presentation.R
+import com.example.presentation.catalog_screen.CatalogScreenViewModel
 import com.example.presentation.theme.Primary
 import com.example.utils.Constants
 
 @Composable
 fun Button(
-    sum: String
+    sum: String,
+    viewModel: CatalogScreenViewModel,
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 12.dp)
             .background(Primary, RoundedCornerShape(8.dp))
+            .clickable { viewModel.cleanShoppingCart() }
     ) {
         Row(
             modifier = Modifier

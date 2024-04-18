@@ -34,7 +34,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.presentation.common.Button
 import com.example.presentation.common.CategoriesRow
@@ -46,7 +45,7 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun CatalogScreen(
-    viewModel: CatalogScreenViewModel = hiltViewModel(),
+    viewModel: CatalogScreenViewModel,
     navigateToDetail: (id: Int) -> Unit
 ) {
     val categoriesState =
@@ -107,53 +106,56 @@ fun CatalogScreenContent(
                 }
 
                 is CatalogScreenState.CatalogState -> {
-                    if (currentState.catalog == null) return@Scaffold
-                    Column(
-                        modifier = Modifier
-                            .padding(contentPadding)
-                            .fillMaxSize(),
-                    ) {
-                        CategoriesRow(
-                            categories = currentState.catalog.categoryList.map { it },
-                            viewModel = viewModel
-                        )
-                        Box(
+                    if (currentState.catalog != null) {
+                        Column(
                             modifier = Modifier
-                                .weight(1f)
-                                .fillMaxWidth()
+                                .fillMaxSize(),
                         ) {
-                            if (viewModel.getFilteredProductList(currentState.catalog.productList)
-                                    .isNotEmpty()
+                            CategoriesRow(
+                                categories = currentState.catalog.categoryList.map { it },
+                                viewModel = viewModel
+                            )
+                            Box(
+                                modifier = Modifier
+                                    .weight(1f)
+                                    .fillMaxWidth()
                             ) {
-                                LazyVerticalGrid(
-                                    modifier = Modifier.fillMaxSize(),
-                                    columns = GridCells.Fixed(2),
-                                    verticalArrangement = Arrangement.spacedBy(8.dp),
-                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                if (viewModel.getFilteredProductList
+                                        (currentState.catalog.productList).isNotEmpty()
                                 ) {
-                                    items(items = viewModel.getFilteredProductList(currentState.catalog.productList)) {
-                                        ItemCard(
-                                            product = it,
-                                            viewModel = viewModel,
-                                            navigateToDetail = navigateToDetail,
-                                        )
+                                    LazyVerticalGrid(
+                                        modifier = Modifier.fillMaxSize(),
+                                        columns = GridCells.Fixed(2),
+                                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                    ) {
+                                        items(items = viewModel.getFilteredProductList(
+                                            currentState.catalog.productList)
+                                        ) {
+                                            ItemCard(
+                                                product = it,
+                                                viewModel = viewModel,
+                                                navigateToDetail = navigateToDetail,
+                                            )
+                                        }
                                     }
+                                } else {
+                                    Text(
+                                        modifier = Modifier.align(Alignment.Center),
+                                        text = "Таких блюд нет :(\n" +
+                                                "Попробуйте изменить фильтры",
+                                        fontSize = 16.sp,
+                                        lineHeight = 24.sp,
+                                    )
                                 }
-                            } else {
-                                Text(
-                                    modifier = Modifier.align(Alignment.Center),
-                                    text = "Таких блюд нет :(\n" +
-                                            "Попробуйте изменить фильтры",
-                                    fontSize = 16.sp,
-                                    lineHeight = 24.sp,
+                            }
+
+                            if (viewModel.shoppingCart.value.isNotEmpty()) {
+                                Button(
+                                    sum = viewModel.getSum().toString(),
+                                    viewModel = viewModel,
                                 )
                             }
-                        }
-
-                        if (viewModel.shoppingCart.value.isNotEmpty()) {
-                            Button(
-                                sum = viewModel.getSum().toString()
-                            )
                         }
                     }
                 }

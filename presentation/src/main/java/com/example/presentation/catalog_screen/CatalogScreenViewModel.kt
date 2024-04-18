@@ -9,11 +9,18 @@ import androidx.lifecycle.viewModelScope
 import com.example.domain.model.Product
 import com.example.domain.model.ShoppingCart
 import com.example.domain.model.Tag
-import com.example.domain.usecases.GetCatalogFromCacheUseCase
-import com.example.domain.usecases.GetCatalogUseCase
-import com.example.domain.usecases.InsertCatalogToCache
+import com.example.domain.usecases.catalog_db_use_cases.GetCatalogFromCacheUseCase
+import com.example.domain.usecases.catalog_use_cases.GetCatalogUseCase
+import com.example.domain.usecases.catalog_db_use_cases.InsertCatalogToCache
+import com.example.domain.usecases.shopping_cart_db_use_cases.ClearShoppingCartFromCacheUseCase
+import com.example.domain.usecases.shopping_cart_db_use_cases.DeleteProductFromCacheUseCase
+import com.example.domain.usecases.shopping_cart_db_use_cases.GetProductFromCacheUseCase
+import com.example.domain.usecases.shopping_cart_db_use_cases.GetShoppingCartFromCacheUseCase
+import com.example.domain.usecases.shopping_cart_db_use_cases.InsertProductToCacheUseCase
+import com.example.domain.usecases.shopping_cart_db_use_cases.InsertShoppingCartToCacheUseCase
 import com.example.utils.LoadResource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
@@ -25,6 +32,12 @@ class CatalogScreenViewModel @Inject constructor(
     private val getCatalogUseCase: GetCatalogUseCase,
     private val getCatalogFromCacheUseCase: GetCatalogFromCacheUseCase,
     private val insertCatalogToCache: InsertCatalogToCache,
+    private val insertShoppingCartToCacheUseCase: InsertShoppingCartToCacheUseCase,
+    private val insertProductToCacheUseCase: InsertProductToCacheUseCase,
+    private val getShoppingCartFromCacheUseCase: GetShoppingCartFromCacheUseCase,
+    private val getProductFromCacheUseCase: GetProductFromCacheUseCase,
+    private val deleteProductFromCacheUseCase: DeleteProductFromCacheUseCase,
+    private val clearShoppingCartFromCacheUseCase: ClearShoppingCartFromCacheUseCase,
 ) : ViewModel() {
 
     private val _categoryId = mutableIntStateOf(0)
@@ -43,6 +56,15 @@ class CatalogScreenViewModel @Inject constructor(
 
     private val _selectedProduct = mutableStateOf<Product?>(null)
     val selectedProduct: State<Product?> = _selectedProduct
+
+    init {
+        viewModelScope.launch {
+            while (true) {
+                _shoppingCart.value = getShoppingCartFromCacheUseCase() ?: emptyList()
+                delay(1000)
+            }
+        }
+    }
 
     fun catalogState(): Flow<CatalogScreenState> {
         return getCatalogUseCase()
@@ -80,33 +102,56 @@ class CatalogScreenViewModel @Inject constructor(
     }
 
     fun addToShoppingCart(product: Product) {
-        val updatedShoppingCart = if (_shoppingCart.value.any { it.product.id == product.id }) {
-            _shoppingCart.value.map {
-                if (it.product.id == product.id) {
-                    it.copy(count = it.count + 1)
-                } else {
-                    it
+        val currentProduct = _shoppingCart.value.find { it.product.id == product.id}
+
+        val shoppingCartLastId = _shoppingCart.value.lastOrNull()?.id ?: 0
+        val newId = shoppingCartLastId + 1
+        val newShoppingCart = ShoppingCart(newId, product, 1)
+
+        if (currentProduct == null) {
+            _shoppingCart.value += newShoppingCart
+        } else {
+            _shoppingCart.value = _shoppingCart.value.map {
+                if (it.product == product) it.copy(count = currentProduct.count + 1)
+                else it
+            }
+        }
+        viewModelScope.launch {
+            val shoppingCartFromCache = getShoppingCartFromCacheUseCase()
+
+            if (shoppingCartFromCache?.contains(currentProduct) == false) {
+                insertProductToCacheUseCase(newShoppingCart)
+            } else {
+                val update = currentProduct?.copy(count = currentProduct.count + 1)
+                if (update != null) {
+                    insertProductToCacheUseCase(update)
                 }
             }
-        } else {
-            _shoppingCart.value + ShoppingCart(product, 1)
         }
-        _shoppingCart.value = updatedShoppingCart
     }
 
     fun deleteFromShoppingCart(product: Product) {
-        val updatedShoppingCart = if (_shoppingCart.value.any { it.product.id == product.id && it.count > 1 }) {
-            _shoppingCart.value.map {
-                if (it.product.id == product.id) {
-                    it.copy(count = it.count - 1)
-                } else {
-                    it
-                }
+        val currentProduct = _shoppingCart.value.find { it.product.id == product.id}
+
+        if (currentProduct != null && currentProduct.count > 1) {
+            _shoppingCart.value = _shoppingCart.value.map {
+                if (it.product == product) it.copy(count = currentProduct.count - 1)
+                else it
             }
-        } else {
-            _shoppingCart.value - ShoppingCart(product, 1)
+        } else if (currentProduct != null && currentProduct.count >= 1) {
+            _shoppingCart.value = _shoppingCart.value.minus(ShoppingCart(currentProduct.id,product, 1))
         }
-        _shoppingCart.value = updatedShoppingCart
+
+        viewModelScope.launch {
+            val shoppingCartFromCache = getProductFromCacheUseCase(product)
+
+            if (shoppingCartFromCache != null && shoppingCartFromCache.count > 1) {
+                val update = shoppingCartFromCache.copy(count = shoppingCartFromCache.count - 1)
+                insertProductToCacheUseCase(update)
+            } else if (shoppingCartFromCache != null && shoppingCartFromCache.count >= 1) {
+                deleteProductFromCacheUseCase(product)
+            }
+        }
     }
 
     fun getProductCount(product: Product): Int {
@@ -131,6 +176,13 @@ class CatalogScreenViewModel @Inject constructor(
             if (catalog != null) {
                 _selectedProduct.value = catalog.productList.find { it.id == id }
             }
+        }
+    }
+
+    fun cleanShoppingCart() {
+        viewModelScope.launch {
+            clearShoppingCartFromCacheUseCase()
+            _shoppingCart.value = emptyList()
         }
     }
 }
