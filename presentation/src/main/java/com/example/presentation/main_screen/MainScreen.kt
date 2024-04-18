@@ -64,6 +64,9 @@ fun Navigation(navController: NavHostController) {
                 navigateToDetail = {
                     navController.currentBackStackEntry?.savedStateHandle?.set("id", it)
                     navController.navigate(NavigationObject.DetailScreen.route)
+                },
+                navigateToShoppingCart = {
+                    navController.navigate(NavigationItem.ShoppingCartScreen.route)
                 }
             )
         }
@@ -82,7 +85,13 @@ fun Navigation(navController: NavHostController) {
         }
 
         composable(NavigationItem.ShoppingCartScreen.route) {
-            ShoppingCartScreen()
+            ShoppingCartScreen(
+                viewModel = viewModel,
+                navigateToDetail = {
+                    navController.currentBackStackEntry?.savedStateHandle?.set("id", it)
+                    navController.navigate(NavigationObject.DetailScreen.route)
+                }
+            )
         }
 
         composable(NavigationItem.Favorite.route) {

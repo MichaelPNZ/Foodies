@@ -46,7 +46,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun CatalogScreen(
     viewModel: CatalogScreenViewModel,
-    navigateToDetail: (id: Int) -> Unit
+    navigateToDetail: (id: Int) -> Unit,
+    navigateToShoppingCart: () -> Unit,
 ) {
     val categoriesState =
         viewModel.catalogState.collectAsStateWithLifecycle(CatalogScreenState.Initial)
@@ -55,6 +56,7 @@ fun CatalogScreen(
         categoriesState = categoriesState,
         viewModel = viewModel,
         navigateToDetail = navigateToDetail,
+        navigateToShoppingCart = navigateToShoppingCart,
     )
 }
 
@@ -64,6 +66,7 @@ fun CatalogScreenContent(
     categoriesState: State<CatalogScreenState>,
     viewModel: CatalogScreenViewModel,
     navigateToDetail: (id: Int) -> Unit,
+    navigateToShoppingCart: () -> Unit,
 ) {
     val sheetState = rememberModalBottomSheetState()
     val scope = rememberCoroutineScope()
@@ -151,10 +154,9 @@ fun CatalogScreenContent(
                             }
 
                             if (viewModel.shoppingCart.value.isNotEmpty()) {
-                                Button(
-                                    sum = viewModel.getSum().toString(),
-                                    viewModel = viewModel,
-                                )
+                                Button(sum = viewModel.getSum().toString()) {
+                                    navigateToShoppingCart()
+                                }
                             }
                         }
                     }

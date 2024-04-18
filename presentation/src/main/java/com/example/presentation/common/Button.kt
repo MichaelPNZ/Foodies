@@ -20,21 +20,20 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.presentation.R
-import com.example.presentation.catalog_screen.CatalogScreenViewModel
 import com.example.presentation.theme.Primary
 import com.example.utils.Constants
 
 @Composable
 fun Button(
     sum: String,
-    viewModel: CatalogScreenViewModel,
+    navigateToShoppingCart: () -> Unit,
 ) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 12.dp)
             .background(Primary, RoundedCornerShape(8.dp))
-            .clickable { viewModel.cleanShoppingCart() }
+            .clickable { navigateToShoppingCart() }
     ) {
         Row(
             modifier = Modifier
