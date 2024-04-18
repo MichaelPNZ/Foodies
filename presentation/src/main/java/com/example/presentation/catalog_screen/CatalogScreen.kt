@@ -77,132 +77,137 @@ fun CatalogScreenContent(
             }
         }
     ) { contentPadding ->
-        when (val currentState = categoriesState.value) {
-            is CatalogScreenState.Initial -> {}
-            is CatalogScreenState.Loading -> {
-                Box(
-                    modifier = Modifier
-                        .padding(contentPadding)
-                        .fillMaxSize()
-                    ,
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator()
-                }
-            }
-
-            is CatalogScreenState.Error -> {
-                Box(
-                    modifier = Modifier
-                        .padding(contentPadding)
-                        .fillMaxSize()
-                    ,
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(text = "Error loading data")
-                }
-            }
-
-            is CatalogScreenState.CatalogState -> {
-                if (currentState.catalog == null) return@Scaffold
-                Column(
-                    modifier = Modifier
-                        .padding(contentPadding)
-                        .fillMaxSize()
-                    ,
-                ) {
-                    CategoriesRow(
-                        categories = currentState.catalog.categoryList.map { it },
-                        viewModel = viewModel
-                    )
+        Column(
+            modifier = Modifier
+                .padding(contentPadding)
+                .fillMaxSize(),
+        ) {
+            when (val currentState = categoriesState.value) {
+                is CatalogScreenState.Initial -> {}
+                is CatalogScreenState.Loading -> {
                     Box(
                         modifier = Modifier
-                            .weight(1f)
-                            .fillMaxWidth()
+                            .padding(contentPadding)
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
                     ) {
-                        if (viewModel.getFilteredProductList(currentState.catalog.productList).isNotEmpty()) {
-                            LazyVerticalGrid(
-                                modifier = Modifier.fillMaxSize(),
-                                columns = GridCells.Fixed(2),
-                                verticalArrangement = Arrangement.spacedBy(8.dp),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        CircularProgressIndicator()
+                    }
+                }
+
+                is CatalogScreenState.Error -> {
+                    Box(
+                        modifier = Modifier
+                            .padding(contentPadding)
+                            .fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(text = "Error loading data")
+                    }
+                }
+
+                is CatalogScreenState.CatalogState -> {
+                    if (currentState.catalog == null) return@Scaffold
+                    Column(
+                        modifier = Modifier
+                            .padding(contentPadding)
+                            .fillMaxSize(),
+                    ) {
+                        CategoriesRow(
+                            categories = currentState.catalog.categoryList.map { it },
+                            viewModel = viewModel
+                        )
+                        Box(
+                            modifier = Modifier
+                                .weight(1f)
+                                .fillMaxWidth()
+                        ) {
+                            if (viewModel.getFilteredProductList(currentState.catalog.productList)
+                                    .isNotEmpty()
                             ) {
-                                items(items = viewModel.getFilteredProductList(currentState.catalog.productList)) {
-                                    ItemCard(
-                                        product = it,
-                                        viewModel = viewModel,
-                                        navigateToDetail = navigateToDetail,
-                                    )
+                                LazyVerticalGrid(
+                                    modifier = Modifier.fillMaxSize(),
+                                    columns = GridCells.Fixed(2),
+                                    verticalArrangement = Arrangement.spacedBy(8.dp),
+                                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                ) {
+                                    items(items = viewModel.getFilteredProductList(currentState.catalog.productList)) {
+                                        ItemCard(
+                                            product = it,
+                                            viewModel = viewModel,
+                                            navigateToDetail = navigateToDetail,
+                                        )
+                                    }
                                 }
+                            } else {
+                                Text(
+                                    modifier = Modifier.align(Alignment.Center),
+                                    text = "Таких блюд нет :(\n" +
+                                            "Попробуйте изменить фильтры",
+                                    fontSize = 16.sp,
+                                    lineHeight = 24.sp,
+                                )
                             }
-                        } else {
-                            Text(
-                                modifier = Modifier.align(Alignment.Center),
-                                text = "Таких блюд нет :(\n" +
-                                        "Попробуйте изменить фильтры",
-                                fontSize = 16.sp,
-                                lineHeight = 24.sp,
+                        }
+
+                        if (viewModel.shoppingCart.value.isNotEmpty()) {
+                            Button(
+                                sum = viewModel.getSum().toString()
                             )
                         }
                     }
-
-                    if (viewModel.shoppingCart.value.isNotEmpty()) {
-                        Button(
-                            sum = viewModel.getSum().toString()
-                        )
-                    }
                 }
             }
-        }
-        if (showBottomSheet) {
-            ModalBottomSheet(
-                onDismissRequest = {
-                    showBottomSheet = false
-                },
-                sheetState = sheetState,
-                containerColor = Color.White,
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(start = 24.dp, end = 24.dp, bottom = 32.dp)
+            if (showBottomSheet) {
+                ModalBottomSheet(
+                    onDismissRequest = {
+                        showBottomSheet = false
+                    },
+                    sheetState = sheetState,
+                    containerColor = Color.White,
                 ) {
-                    Text(
-                        text = "Подобрать блюда",
-                        fontSize = 20.sp,
-                        fontWeight = FontWeight.Medium,
-                        lineHeight = 24.sp
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    viewModel.tagList.value.forEachIndexed { index, tag ->
-                        FilterItem(
-                            tag = tag,
-                            viewModel = viewModel
-                        )
-                        if (index < viewModel.tagList.value.size - 1) {
-                            HorizontalDivider()
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Box(
+                    Column(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .background(Primary, RoundedCornerShape(8.dp))
-                            .clickable {
-                                scope.launch {
-                                    sheetState.hide()
-                                    showBottomSheet = false
-                                }
-                            }
+                            .padding(start = 24.dp, end = 24.dp, bottom = 32.dp)
                     ) {
                         Text(
-                            modifier = Modifier.padding(16.dp),
-                            text = "Готово",
-                            fontSize = 16.sp,
+                            text = "Подобрать блюда",
+                            fontSize = 20.sp,
                             fontWeight = FontWeight.Medium,
-                            color = Color.White,
+                            lineHeight = 24.sp
                         )
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        viewModel.tagList.value.forEachIndexed { index, tag ->
+                            FilterItem(
+                                tag = tag,
+                                viewModel = viewModel
+                            )
+                            if (index < viewModel.tagList.value.size - 1) {
+                                HorizontalDivider()
+                            }
+                        }
+
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .background(Primary, RoundedCornerShape(8.dp))
+                                .clickable {
+                                    scope.launch {
+                                        sheetState.hide()
+                                        showBottomSheet = false
+                                    }
+                                }
+                        ) {
+                            Text(
+                                modifier = Modifier.padding(16.dp),
+                                text = "Готово",
+                                fontSize = 16.sp,
+                                fontWeight = FontWeight.Medium,
+                                color = Color.White,
+                            )
+                        }
                     }
                 }
             }
