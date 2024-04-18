@@ -1,6 +1,5 @@
 package com.example.presentation.common
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -43,7 +42,6 @@ fun Counter(
                     .padding(8.dp)
                     .clickable {
                         viewModel.deleteFromShoppingCart(product)
-                        Log.i("!!!", "${viewModel.shoppingCart.value}")
                     },
                 painter = painterResource(id = R.drawable.minus),
                 contentDescription = null,
@@ -69,8 +67,6 @@ fun Counter(
                     .padding(8.dp)
                     .clickable {
                         viewModel.addToShoppingCart(product)
-                        Log.i("!!!", "${viewModel.shoppingCart.value}")
-
                     },
                 painter = painterResource(id = R.drawable.plus),
                 contentDescription = null,
