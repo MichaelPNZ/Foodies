@@ -1,6 +1,7 @@
 package com.example.foodies.presentation.catalog_screen
 
-import com.example.foodies.domain.model.Catalog
+import com.example.domain.model.Catalog
+
 
 sealed class CatalogScreenState {
 

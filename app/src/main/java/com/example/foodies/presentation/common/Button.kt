@@ -20,7 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.foodies.R
 import com.example.foodies.presentation.theme.Primary
-import com.example.foodies.utils.Constants
+import com.example.utils.Constants
 
 @Composable
 fun Button(

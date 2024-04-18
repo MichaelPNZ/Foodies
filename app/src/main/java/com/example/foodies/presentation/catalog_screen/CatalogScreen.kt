@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.example.foodies.domain.model.Product
+import com.example.domain.model.Product
 import com.example.foodies.presentation.common.Button
 import com.example.foodies.presentation.common.CategoriesRow
 import com.example.foodies.presentation.common.FilterItem

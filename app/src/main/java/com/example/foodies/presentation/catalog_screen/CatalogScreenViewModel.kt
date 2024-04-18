@@ -5,11 +5,11 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
-import com.example.foodies.domain.model.Product
-import com.example.foodies.domain.model.ShoppingCart
-import com.example.foodies.domain.model.Tag
-import com.example.foodies.domain.usecases.GetCatalogUseCase
-import com.example.foodies.utils.LoadResource
+import com.example.domain.model.Product
+import com.example.domain.model.ShoppingCart
+import com.example.domain.model.Tag
+import com.example.domain.usecases.GetCatalogUseCase
+import com.example.utils.LoadResource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map

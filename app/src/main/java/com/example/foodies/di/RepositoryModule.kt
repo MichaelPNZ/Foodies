@@ -1,7 +1,7 @@
 package com.example.foodies.di
 
 import com.example.foodies.data.repository.ProductRepositoryImpl
-import com.example.foodies.domain.repository.ProductRepository
+import com.example.domain.repository.ProductRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -14,5 +14,5 @@ interface RepositoryModule {
 
     @Binds
     @Singleton
-    fun bindProductRepository(impl: ProductRepositoryImpl): ProductRepository
+    fun bindProductRepository(impl: com.example.foodies.data.repository.ProductRepositoryImpl): ProductRepository
 }

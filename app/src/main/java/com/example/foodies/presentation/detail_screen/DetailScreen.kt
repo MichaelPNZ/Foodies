@@ -29,14 +29,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.domain.model.Product
 import com.example.foodies.R
-import com.example.foodies.domain.model.Product
 import com.example.foodies.presentation.catalog_screen.CatalogScreenViewModel
 import com.example.foodies.presentation.common.Counter
 import com.example.foodies.presentation.common.ListItem
 import com.example.foodies.presentation.theme.Dark
 import com.example.foodies.presentation.theme.Primary
-import com.example.foodies.utils.Constants
 
 @Composable
 fun DetailScreen(
@@ -159,7 +158,7 @@ fun DetailScreen(
                     )
 
                     Text(
-                        text = "${product.priceCurrent} ${Constants.RUR}",
+                        text = "${product.priceCurrent} ${com.example.utils.Constants.RUR}",
                         fontSize = 16.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color.White

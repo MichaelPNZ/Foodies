@@ -1,7 +1,7 @@
 package com.example.foodies.di
 
 import com.example.data.network.ApiService
-import com.example.foodies.utils.Constants
+import com.example.utils.Constants
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides

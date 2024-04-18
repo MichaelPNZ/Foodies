@@ -20,10 +20,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.foodies.domain.model.Product
+import com.example.domain.model.Product
 import com.example.foodies.presentation.catalog_screen.CatalogScreenViewModel
 import com.example.foodies.presentation.theme.Dark
-import com.example.foodies.utils.Constants
+import com.example.utils.Constants
 
 @Composable
 fun AddToCartButton(
