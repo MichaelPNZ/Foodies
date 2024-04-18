@@ -1,7 +1,11 @@
 package com.example.foodies.di
 
+import android.app.Application
+import androidx.room.Room
 import com.example.data.network.ApiService
+import com.example.foodies.data.local.AppDatabase
 import com.example.utils.Constants
+import com.example.utils.Constants.NAME_DATABASE
 import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
@@ -75,14 +79,14 @@ object AppModule {
             .create()
     }
 
-//    @Provides
-//    @Singleton
-//    fun provideAppDatabase(app: Application): AppDatabase {
-//        return Room.databaseBuilder(
-//            app,
-//            AppDatabase::class.java,
-//            NAME_DATABASE
-//        ).fallbackToDestructiveMigration()
-//            .build()
-//    }
+    @Provides
+    @Singleton
+    fun provideAppDatabase(app: Application): AppDatabase {
+        return Room.databaseBuilder(
+            app,
+            AppDatabase::class.java,
+            NAME_DATABASE
+        ).fallbackToDestructiveMigration()
+            .build()
+    }
 }

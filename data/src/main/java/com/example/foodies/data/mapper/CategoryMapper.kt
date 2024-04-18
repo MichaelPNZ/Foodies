@@ -1,4 +1,4 @@
-package com.example.data.mapper
+package com.example.foodies.data.mapper
 
 import com.example.foodies.data.network.dto.CategoryDTO
 import com.example.domain.model.Category
