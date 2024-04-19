@@ -7,6 +7,7 @@ pluginManagement {
                 includeGroupByRegex("androidx.*")
             }
         }
+        maven(url = "https://oss.sonatype.org/content/repositories/snapshots/")
         mavenCentral()
         gradlePluginPortal()
     }

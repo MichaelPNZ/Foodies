@@ -10,6 +10,7 @@ sealed class NavigationItem(val title: String, val route: String, var icon: Int)
 }
 
 sealed class NavigationObject(val route: String) {
+    data object SplashScreen : NavigationObject("SplashScreen")
     data object ShoppingCartScreen : NavigationObject("ShoppingCart")
     data object DetailScreen : NavigationObject("DetailScreen") {
         fun createRoute(foodId: Int) = "$route/$foodId"

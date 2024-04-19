@@ -51,8 +51,7 @@ fun ShoppingCartScreen(
                 modifier = Modifier
                     .height(56.dp)
                     .fillMaxWidth()
-                    .padding(16.dp)
-                    .background(Color.White),
+                    .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -73,7 +72,8 @@ fun ShoppingCartScreen(
                     fontWeight = FontWeight.SemiBold,
                 )
             }
-        }
+        },
+        containerColor = Color.White
     ) { contentPadding ->
         if (shoppingCartState.isNotEmpty()) {
             Column {
@@ -81,8 +81,7 @@ fun ShoppingCartScreen(
                     modifier = Modifier
                         .padding(contentPadding)
                         .weight(1f)
-                        .fillMaxWidth()
-                        .background(Color.White),
+                        .fillMaxWidth(),
                 ) {
                     items(shoppingCartState.size) { index ->
                         CartRow(
