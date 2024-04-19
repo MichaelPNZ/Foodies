@@ -27,6 +27,7 @@ import com.example.presentation.navigation.NavigationItem
 import com.example.presentation.navigation.NavigationObject
 import com.example.presentation.navigation.NavigationObject.Companion.FOOD_ID_PARAM_KEY
 import com.example.presentation.shopping_cart_screen.ShoppingCartScreen
+import com.example.presentation.splash_screen.SplashScreen
 import java.lang.IllegalStateException
 
 @Composable
@@ -59,7 +60,15 @@ fun MainScreen() {
 @Composable
 fun Navigation(navController: NavHostController) {
     val viewModel: CatalogScreenViewModel = hiltViewModel()
-    NavHost(navController, startDestination = NavigationItem.CatalogScreen.route) {
+    NavHost(navController, startDestination = NavigationObject.SplashScreen.route) {
+        composable(NavigationObject.SplashScreen.route) {
+            SplashScreen(
+                navigateToCatalogScreen = {
+                    navController.navigate(NavigationItem.CatalogScreen.route)
+                }
+            )
+        }
+
         composable(NavigationItem.CatalogScreen.route) {
             CatalogScreen(
                 viewModel = viewModel,

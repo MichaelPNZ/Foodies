@@ -2,7 +2,6 @@
 <resources>
 
     <style name="Theme.Foodies" parent="android:Theme.Material.Light.NoActionBar" >
-
         <item name="android:windowBackground">@color/splash_screen_background</item>
     </style>
 </resources>

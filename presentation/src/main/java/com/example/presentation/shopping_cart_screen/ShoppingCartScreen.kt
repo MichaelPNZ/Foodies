@@ -1,7 +1,6 @@
 package com.example.presentation.shopping_cart_screen
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -51,8 +50,7 @@ fun ShoppingCartScreen(
                 modifier = Modifier
                     .height(56.dp)
                     .fillMaxWidth()
-                    .padding(16.dp)
-                    .background(Color.White),
+                    .padding(16.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
@@ -73,7 +71,8 @@ fun ShoppingCartScreen(
                     fontWeight = FontWeight.SemiBold,
                 )
             }
-        }
+        },
+        containerColor = Color.White
     ) { contentPadding ->
         if (shoppingCartState.isNotEmpty()) {
             Column {
@@ -81,8 +80,7 @@ fun ShoppingCartScreen(
                     modifier = Modifier
                         .padding(contentPadding)
                         .weight(1f)
-                        .fillMaxWidth()
-                        .background(Color.White),
+                        .fillMaxWidth(),
                 ) {
                     items(shoppingCartState.size) { index ->
                         CartRow(

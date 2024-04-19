@@ -82,6 +82,7 @@ fun CatalogScreenContent(
         Column(
             modifier = Modifier
                 .padding(contentPadding)
+                .background(Color.White)
                 .fillMaxSize(),
         ) {
             when (val currentState = categoriesState.value) {
