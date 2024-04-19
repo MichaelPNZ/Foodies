@@ -2,7 +2,7 @@ package com.example.foodies.di
 
 import android.app.Application
 import androidx.room.Room
-import com.example.data.network.ApiService
+import com.example.foodies.data.network.ApiService
 import com.example.foodies.data.local.AppDatabase
 import com.example.foodies.data.local.dao.CatalogDao
 import com.example.foodies.data.local.dao.ShoppingCartDao

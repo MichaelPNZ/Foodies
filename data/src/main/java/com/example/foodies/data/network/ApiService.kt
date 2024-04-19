@@ -1,8 +1,8 @@
-package com.example.data.network
+package com.example.foodies.data.network
 
 import com.example.foodies.data.network.dto.CategoryDTO
-import com.example.data.network.dto.ProductDTO
-import com.example.data.network.dto.TagDTO
+import com.example.foodies.data.network.dto.ProductDTO
+import com.example.foodies.data.network.dto.TagDTO
 import retrofit2.http.GET
 
 interface ApiService {
