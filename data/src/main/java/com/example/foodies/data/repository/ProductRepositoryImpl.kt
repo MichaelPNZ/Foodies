@@ -10,6 +10,8 @@ import com.example.domain.repository.ProductRepository
 import com.example.foodies.data.mapper.toProduct
 import com.example.foodies.data.mapper.toTag
 import com.example.utils.LoadResource
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import javax.inject.Inject
@@ -54,21 +56,29 @@ class ProductRepositoryImpl @Inject constructor(
     override fun getCatalog(): Flow<LoadResource<Catalog>?> {
         return flow {
             try {
-                val categories = apiService.getCategories().map { it.toCategory() }
-                val products = apiService.getProducts().map { it.toProduct() }
-                val tags = apiService.getTags().map { it.toTag() }
-                emit(
-                    LoadResource.Success(
-                    Catalog(
-                        categories,
-                        products,
-                        tags
+                coroutineScope {
+                    val categories = async {
+                        apiService.getCategories().map { it.toCategory() }
+                    }
+                    val products = async {
+                        apiService.getProducts().map { it.toProduct() }
+                    }
+                    val tags = async {
+                        apiService.getTags().map { it.toTag() }
+                    }
+                    emit(
+                        LoadResource.Success(
+                            Catalog(
+                                categories.await(),
+                                products.await(),
+                                tags.await()
+                            )
+                        )
                     )
-                ))
+                }
             } catch (e: Exception) {
                 emit(LoadResource.Error("Ошибка загрузки каталога: ${e.message}"))
             }
         }
     }
-
 }

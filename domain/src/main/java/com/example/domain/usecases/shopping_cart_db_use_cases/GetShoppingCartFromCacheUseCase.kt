@@ -7,5 +7,5 @@ import javax.inject.Inject
 class GetShoppingCartFromCacheUseCase  @Inject constructor(
     private val shoppingCartDBRepository: ShoppingCartDBRepository
 ) {
-    suspend operator fun invoke(): List<ShoppingCart>? = shoppingCartDBRepository.getShoppingCart()
+    suspend operator fun invoke(): List<ShoppingCart> = shoppingCartDBRepository.getShoppingCart()
 }

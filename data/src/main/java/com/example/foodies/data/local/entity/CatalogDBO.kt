@@ -8,6 +8,7 @@ import com.example.domain.model.Category
 import com.example.domain.model.Product
 import com.example.domain.model.Tag
 import com.google.gson.Gson
+import com.google.gson.GsonBuilder
 import com.google.gson.reflect.TypeToken
 
 @Entity
@@ -20,47 +21,49 @@ data class CatalogDBO(
 
 class StringListConverter {
 
+    private val gson: Gson = GsonBuilder().setLenient().create()
+
     @TypeConverter
     fun fromCategoryList(value: String): List<Category> {
         val listType = object : TypeToken<List<Category>>() {}.type
-        return Gson().fromJson(value, listType)
+        return gson.fromJson(value, listType)
     }
 
     @TypeConverter
     fun toCategoryList(list: List<Category>): String {
-        return Gson().toJson(list)
+        return gson.toJson(list)
     }
 
     @TypeConverter
     fun fromProductList(value: String): List<Product> {
         val listType = object : TypeToken<List<Product>>() {}.type
-        return Gson().fromJson(value, listType)
+        return gson.fromJson(value, listType)
     }
 
     @TypeConverter
     fun toProductList(list: List<Product>): String {
-        return Gson().toJson(list)
+        return gson.toJson(list)
     }
 
     @TypeConverter
     fun fromTagList(value: String): List<Tag> {
         val listType = object : TypeToken<List<Tag>>() {}.type
-        return Gson().fromJson(value, listType)
+        return gson.fromJson(value, listType)
     }
 
     @TypeConverter
     fun toTagList(list: List<Tag>): String {
-        return Gson().toJson(list)
+        return gson.toJson(list)
     }
 
     @TypeConverter
     fun fromProduct(value: String): Product {
         val product = object : TypeToken<Product>() {}.type
-        return Gson().fromJson(value, product)
+        return gson.fromJson(value, product)
     }
 
     @TypeConverter
     fun toProduct(product: Product): String {
-        return Gson().toJson(product)
+        return gson.toJson(product)
     }
 }

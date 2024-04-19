@@ -57,7 +57,13 @@ class CatalogScreenViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            _shoppingCart.value = getShoppingCartFromCacheUseCase() ?: emptyList()
+//            _shoppingCart.value = getShoppingCartFromCacheUseCase()
+
+            val cachedCatalog = getCatalogFromCacheUseCase()
+            cachedCatalog?.let {
+                _categoryId.intValue = it.categoryList.firstOrNull()?.id ?: 0
+                _tagList.value = it.tagList
+            }
         }
     }
 
@@ -65,10 +71,12 @@ class CatalogScreenViewModel @Inject constructor(
         .map { result ->
             when (result) {
                 is LoadResource.Success -> {
-                    result.data?.let { insertCatalogToCache(it) }
-                    _categoryId.intValue = result.data?.categoryList?.first()?.id ?:0
-                    _tagList.value = result.data?.tagList ?: emptyList()
-                    CatalogScreenState.CatalogState(catalog = result.data)
+                    result.data?.let { catalog ->
+                        insertCatalogToCache(catalog)
+                        _categoryId.intValue = catalog.categoryList.firstOrNull()?.id ?: 0
+                        _tagList.value = catalog.tagList
+                        CatalogScreenState.CatalogState(catalog)
+                    }
                 }
                 is LoadResource.Error -> {
                     CatalogScreenState.Error
@@ -112,7 +120,7 @@ class CatalogScreenViewModel @Inject constructor(
         viewModelScope.launch {
             val shoppingCartFromCache = getShoppingCartFromCacheUseCase()
 
-            if (shoppingCartFromCache?.contains(currentProduct) == false) {
+            if (!shoppingCartFromCache.contains(currentProduct)) {
                 insertProductToCacheUseCase(newShoppingCart)
             } else {
                 val update = currentProduct?.copy(count = currentProduct.count + 1)

@@ -11,10 +11,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.presentation.account_screen.AccountScreen
 import com.example.presentation.catalog_screen.CatalogScreen
 import com.example.presentation.catalog_screen.CatalogScreenViewModel
@@ -23,7 +25,9 @@ import com.example.presentation.favorite_screen.FavoriteScreen
 import com.example.presentation.navigation.BottomNavigationBar
 import com.example.presentation.navigation.NavigationItem
 import com.example.presentation.navigation.NavigationObject
+import com.example.presentation.navigation.NavigationObject.Companion.FOOD_ID_PARAM_KEY
 import com.example.presentation.shopping_cart_screen.ShoppingCartScreen
+import java.lang.IllegalStateException
 
 @Composable
 fun MainScreen() {
@@ -33,7 +37,6 @@ fun MainScreen() {
 
     showBottomBar = when (navBackStackEntry?.destination?.route) {
         "catalogScreen" -> true
-        "shoppingCart" -> true
         "favorite" -> true
         "account" -> true
         else -> false
@@ -58,39 +61,34 @@ fun Navigation(navController: NavHostController) {
     val viewModel: CatalogScreenViewModel = hiltViewModel()
     NavHost(navController, startDestination = NavigationItem.CatalogScreen.route) {
         composable(NavigationItem.CatalogScreen.route) {
-
             CatalogScreen(
                 viewModel = viewModel,
-                navigateToDetail = {
-                    navController.currentBackStackEntry?.savedStateHandle?.set("id", it)
-                    navController.navigate(NavigationObject.DetailScreen.route)
+                navigateToDetail = { foodId ->
+                    navController.navigate(NavigationObject.DetailScreen.createRoute(foodId))
                 },
                 navigateToShoppingCart = {
-                    navController.navigate(NavigationItem.ShoppingCartScreen.route)
+                    navController.navigate(NavigationObject.ShoppingCartScreen.route)
                 }
             )
         }
 
-        composable(NavigationObject.DetailScreen.route) {
-            val id =
-                navController.previousBackStackEntry?.savedStateHandle?.get<Int>("id")
-            if (id != null) {
-                DetailScreen(
-                    id,
-                    viewModel = viewModel
-                ) {
-                    navController.navigateUp()
-                }
+        composable(
+            route = "${NavigationObject.DetailScreen.route}/{$FOOD_ID_PARAM_KEY}",
+            arguments = listOf(navArgument(FOOD_ID_PARAM_KEY) { type = NavType.IntType })
+        ) {
+            val foodId = it.arguments?.getInt(FOOD_ID_PARAM_KEY) ?: throw IllegalStateException()
+            DetailScreen(id = foodId, viewModel = viewModel) {
+                navController.navigateUp()
             }
         }
 
-        composable(NavigationItem.ShoppingCartScreen.route) {
+        composable(NavigationObject.ShoppingCartScreen.route) {
             ShoppingCartScreen(
                 viewModel = viewModel,
-                navigateToDetail = {
-                    navController.currentBackStackEntry?.savedStateHandle?.set("id", it)
-                    navController.navigate(NavigationObject.DetailScreen.route)
-                }
+                navigateToDetail = { foodId ->
+                    navController.navigate(NavigationObject.DetailScreen.createRoute(foodId))
+                },
+                navigateBack = { navController.navigateUp() }
             )
         }
 

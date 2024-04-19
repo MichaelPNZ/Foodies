@@ -15,6 +15,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,7 +40,8 @@ import com.example.utils.Constants
 @Composable
 fun ShoppingCartScreen(
     viewModel: CatalogScreenViewModel,
-    navigateToDetail: (id: Int) -> Unit
+    navigateToDetail: (id: Int) -> Unit,
+    navigateBack: () -> Unit,
 ) {
     val shoppingCartState by remember { viewModel.shoppingCart }
 
@@ -49,13 +51,14 @@ fun ShoppingCartScreen(
                 modifier = Modifier
                     .height(56.dp)
                     .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(16.dp)
+                    .background(Color.White),
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
                     modifier = Modifier
                         .size(24.dp)
-                        .clickable { },
+                        .clickable { navigateBack() },
                     painter = painterResource(id = R.drawable.arrow_left),
                     contentDescription = null,
                     colorFilter = ColorFilter.tint(Primary)
@@ -88,6 +91,7 @@ fun ShoppingCartScreen(
                         ) {
                             navigateToDetail(shoppingCartState[index].product.id)
                         }
+                        HorizontalDivider()
                     }
                 }
                 Button(

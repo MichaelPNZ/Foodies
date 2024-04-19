@@ -63,7 +63,7 @@ fun CatalogScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CatalogScreenContent(
-    categoriesState: State<CatalogScreenState>,
+    categoriesState: State<CatalogScreenState?>,
     viewModel: CatalogScreenViewModel,
     navigateToDetail: (id: Int) -> Unit,
     navigateToShoppingCart: () -> Unit,
@@ -161,6 +161,7 @@ fun CatalogScreenContent(
                         }
                     }
                 }
+                null -> TODO()
             }
             if (showBottomSheet) {
                 ModalBottomSheet(

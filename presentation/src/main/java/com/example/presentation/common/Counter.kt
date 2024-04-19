@@ -39,7 +39,7 @@ fun Counter(
         ) {
             Image(
                 modifier = Modifier
-                    .padding(8.dp)
+                    .padding(12.dp)
                     .clickable {
                         viewModel.deleteFromShoppingCart(product)
                     },
@@ -64,7 +64,7 @@ fun Counter(
         ) {
             Image(
                 modifier = Modifier
-                    .padding(8.dp)
+                    .padding(12.dp)
                     .clickable {
                         viewModel.addToShoppingCart(product)
                     },

@@ -4,6 +4,8 @@ import android.app.Application
 import androidx.room.Room
 import com.example.data.network.ApiService
 import com.example.foodies.data.local.AppDatabase
+import com.example.foodies.data.local.dao.CatalogDao
+import com.example.foodies.data.local.dao.ShoppingCartDao
 import com.example.utils.Constants
 import com.example.utils.Constants.NAME_DATABASE
 import com.google.gson.GsonBuilder
@@ -48,13 +50,6 @@ object AppModule {
     ): OkHttpClient {
         val httpClient: OkHttpClient.Builder = OkHttpClient.Builder()
             .addInterceptor(loggingInterceptor)
-            .addInterceptor { chain ->
-                val original = chain.request()
-                val request = original.newBuilder()
-                    .method(original.method, original.body)
-                    .build()
-                chain.proceed(request)
-            }
 
         return httpClient
             .connectTimeout(60, TimeUnit.SECONDS)
@@ -88,5 +83,17 @@ object AppModule {
             NAME_DATABASE
         ).fallbackToDestructiveMigration()
             .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideCatalogDao(appDatabase: AppDatabase): CatalogDao {
+        return appDatabase.catalogDao
+    }
+
+    @Provides
+    @Singleton
+    fun provideShoppingCartDao(appDatabase: AppDatabase): ShoppingCartDao {
+        return appDatabase.shoppingCartDao
     }
 }

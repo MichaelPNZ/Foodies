@@ -21,9 +21,8 @@ fun BottomNavigationBar(navController: NavController) {
     var selectedItem by remember { mutableIntStateOf(
         when (currentRoute) {
             NavigationItem.CatalogScreen.route -> 0
-            NavigationItem.ShoppingCartScreen.route -> 1
-            NavigationItem.Favorite.route -> 2
-            NavigationItem.Account.route -> 3
+            NavigationItem.Favorite.route -> 1
+            NavigationItem.Account.route -> 2
             else -> 0
         }
     )
@@ -31,7 +30,6 @@ fun BottomNavigationBar(navController: NavController) {
 
     val items = listOf(
         NavigationItem.CatalogScreen,
-        NavigationItem.ShoppingCartScreen,
         NavigationItem.Favorite,
         NavigationItem.Account
     )
@@ -49,9 +47,6 @@ fun BottomNavigationBar(navController: NavController) {
                     selectedTextColor = com.example.presentation.theme.Primary,
                     indicatorColor = Color.Transparent
                 ),
-//                label = {
-//                        Text(text = item.title)
-//                },
                 onClick = {
                     if (selectedItem != index) {
                         selectedItem = index
