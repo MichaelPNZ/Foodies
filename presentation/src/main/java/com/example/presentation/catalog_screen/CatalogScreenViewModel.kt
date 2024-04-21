@@ -10,14 +10,10 @@ import com.example.domain.model.Product
 import com.example.domain.model.ShoppingCart
 import com.example.domain.model.Tag
 import com.example.domain.usecases.catalog_db_use_cases.GetCatalogFromCacheUseCase
-import com.example.domain.usecases.catalog_use_cases.GetCatalogUseCase
 import com.example.domain.usecases.catalog_db_use_cases.InsertCatalogToCache
-import com.example.domain.usecases.shopping_cart_db_use_cases.ClearShoppingCartFromCacheUseCase
-import com.example.domain.usecases.shopping_cart_db_use_cases.DeleteProductFromCacheUseCase
-import com.example.domain.usecases.shopping_cart_db_use_cases.GetProductFromCacheUseCase
-import com.example.domain.usecases.shopping_cart_db_use_cases.GetShoppingCartFromCacheUseCase
-import com.example.domain.usecases.shopping_cart_db_use_cases.InsertProductToCacheUseCase
-import com.example.domain.usecases.shopping_cart_db_use_cases.InsertShoppingCartToCacheUseCase
+import com.example.domain.usecases.catalog_use_cases.GetCatalogUseCase
+import com.example.domain.usecases.user_db_use_case.GetIsLoginUserUseCase
+import com.example.domain.usecases.user_db_use_case.SaveUserUseCase
 import com.example.utils.LoadResource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.map
@@ -30,12 +26,8 @@ class CatalogScreenViewModel @Inject constructor(
     private val getCatalogUseCase: GetCatalogUseCase,
     private val getCatalogFromCacheUseCase: GetCatalogFromCacheUseCase,
     private val insertCatalogToCache: InsertCatalogToCache,
-    private val insertShoppingCartToCacheUseCase: InsertShoppingCartToCacheUseCase,
-    private val insertProductToCacheUseCase: InsertProductToCacheUseCase,
-    private val getShoppingCartFromCacheUseCase: GetShoppingCartFromCacheUseCase,
-    private val getProductFromCacheUseCase: GetProductFromCacheUseCase,
-    private val deleteProductFromCacheUseCase: DeleteProductFromCacheUseCase,
-    private val clearShoppingCartFromCacheUseCase: ClearShoppingCartFromCacheUseCase,
+    private val getIsLoginUserUseCase: GetIsLoginUserUseCase,
+    private val saveUserUseCase: SaveUserUseCase
 ) : ViewModel() {
 
     private val _categoryId = mutableIntStateOf(0)
@@ -55,15 +47,20 @@ class CatalogScreenViewModel @Inject constructor(
     private val _selectedProduct = mutableStateOf<Product?>(null)
     val selectedProduct: State<Product?> = _selectedProduct
 
+    private val _favoriteList: MutableState<List<Product>> =
+        mutableStateOf(emptyList())
+    val favoriteList: State<List<Product>> = _favoriteList
+
     init {
         viewModelScope.launch {
-//            _shoppingCart.value = getShoppingCartFromCacheUseCase()
-
             val cachedCatalog = getCatalogFromCacheUseCase()
             cachedCatalog?.let {
                 _categoryId.intValue = it.categoryList.firstOrNull()?.id ?: 0
                 _tagList.value = it.tagList
             }
+
+            val user = getIsLoginUserUseCase()
+            _favoriteList.value = user?.favoriteProductList ?: emptyList()
         }
     }
 
@@ -117,18 +114,6 @@ class CatalogScreenViewModel @Inject constructor(
                 else it
             }
         }
-        viewModelScope.launch {
-            val shoppingCartFromCache = getShoppingCartFromCacheUseCase()
-
-            if (!shoppingCartFromCache.contains(currentProduct)) {
-                insertProductToCacheUseCase(newShoppingCart)
-            } else {
-                val update = currentProduct?.copy(count = currentProduct.count + 1)
-                if (update != null) {
-                    insertProductToCacheUseCase(update)
-                }
-            }
-        }
     }
 
     fun deleteFromShoppingCart(product: Product) {
@@ -141,17 +126,6 @@ class CatalogScreenViewModel @Inject constructor(
             }
         } else if (currentProduct != null && currentProduct.count >= 1) {
             _shoppingCart.value = _shoppingCart.value.minus(ShoppingCart(currentProduct.id,product, 1))
-        }
-
-        viewModelScope.launch {
-            val shoppingCartFromCache = getProductFromCacheUseCase(product)
-
-            if (shoppingCartFromCache != null && shoppingCartFromCache.count > 1) {
-                val update = shoppingCartFromCache.copy(count = shoppingCartFromCache.count - 1)
-                insertProductToCacheUseCase(update)
-            } else if (shoppingCartFromCache != null && shoppingCartFromCache.count >= 1) {
-                deleteProductFromCacheUseCase(product)
-            }
         }
     }
 
@@ -180,10 +154,38 @@ class CatalogScreenViewModel @Inject constructor(
         }
     }
 
-    fun cleanShoppingCart() {
+    fun makeOrder() {
         viewModelScope.launch {
-            clearShoppingCartFromCacheUseCase()
-            _shoppingCart.value = emptyList()
+            val user = getIsLoginUserUseCase()
+            val currentCartList = _shoppingCart.value
+            if (user != null) {
+                val updatedShoppingCartList = user.copy(shoppingCartList = user.shoppingCartList + listOf(currentCartList))
+                saveUserUseCase(updatedShoppingCartList)
+                _shoppingCart.value = emptyList()
+            }
         }
+    }
+
+    fun getSearchProduct(newQuery: String, currentProductList: List<Product>) : List<Product> {
+        return currentProductList.filter { it.name.equals(newQuery, ignoreCase = true) }
+    }
+
+    fun toggleFavorite(product: Product) {
+        viewModelScope.launch {
+            val user = getIsLoginUserUseCase()
+            if (_favoriteList.value.contains(product) && user != null) {
+                val updatedFavoriteList = user.copy(favoriteProductList = user.favoriteProductList - listOf(product).toSet())
+                saveUserUseCase(updatedFavoriteList)
+                _favoriteList.value = updatedFavoriteList.favoriteProductList
+            } else if (!_favoriteList.value.contains(product) && user != null) {
+                val updatedFavoriteList = user.copy(favoriteProductList = user.favoriteProductList + listOf(product).toSet())
+                saveUserUseCase(updatedFavoriteList)
+                _favoriteList.value = updatedFavoriteList.favoriteProductList
+            }
+        }
+    }
+
+    fun isFavoriteChecked(product: Product): Boolean {
+       return _favoriteList.value.contains(product)
     }
 }

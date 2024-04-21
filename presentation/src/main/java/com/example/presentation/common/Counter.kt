@@ -15,9 +15,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import com.example.domain.model.Product
 import com.example.presentation.R
 import com.example.presentation.catalog_screen.CatalogScreenViewModel
@@ -32,14 +32,16 @@ fun Counter(
         modifier = Modifier
             .background(Color.Transparent)
             .fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_12)),
     ) {
         Box(
-            modifier = Modifier.background(Color.White, RoundedCornerShape(8.dp))
+            modifier = Modifier.background(Color.White, RoundedCornerShape(
+                dimensionResource(id = R.dimen.half_padding))
+            )
         ) {
             Image(
                 modifier = Modifier
-                    .padding(12.dp)
+                    .padding(dimensionResource(id = R.dimen.padding_12))
                     .clickable {
                         viewModel.deleteFromShoppingCart(product)
                     },
@@ -51,7 +53,7 @@ fun Counter(
 
         Text(
             modifier = Modifier
-                .padding(horizontal = 12.dp)
+                .padding(horizontal = dimensionResource(id = R.dimen.padding_12))
                 .align(Alignment.CenterVertically)
                 .weight(1f),
             text = viewModel.getProductCount(product).toString(),
@@ -60,11 +62,13 @@ fun Counter(
         )
 
         Box(
-            modifier = Modifier.background(Color.White, RoundedCornerShape(8.dp))
+            modifier = Modifier.background(Color.White, RoundedCornerShape(
+                dimensionResource(id = R.dimen.half_padding))
+            )
         ) {
             Image(
                 modifier = Modifier
-                    .padding(12.dp)
+                    .padding(dimensionResource(id = R.dimen.padding_12))
                     .clickable {
                         viewModel.addToShoppingCart(product)
                     },

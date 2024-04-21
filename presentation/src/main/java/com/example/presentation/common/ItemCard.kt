@@ -13,10 +13,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -47,11 +51,30 @@ fun ItemCard(
                 painter = painterResource(id = R.drawable.mock_photo),
                 contentDescription = null,
             )
+
+            Icon(
+                painter = painterResource(id = R.drawable.favorite_icon),
+                contentDescription = null,
+                modifier = Modifier
+                    .padding(
+                        end = dimensionResource(id = R.dimen.half_padding),
+                        top = dimensionResource(id = R.dimen.half_padding)
+                    )
+                    .align(Alignment.TopEnd)
+                    .clickable {
+                        viewModel.toggleFavorite(product)
+                    },
+                tint = if (viewModel.isFavoriteChecked(product)) Color.Red else Color.LightGray
+            )
+
             if (product.tagIds.isNotEmpty()) {
                 Image(
                     modifier = Modifier
-                        .size(24.dp)
-                        .padding(start = 8.dp, top = 8.dp),
+                        .size(dimensionResource(id = R.dimen.padding_24))
+                        .padding(
+                            start = dimensionResource(id = R.dimen.half_padding),
+                            top = dimensionResource(id = R.dimen.half_padding)
+                        ),
                     painter = painterResource(
                         id = when (product.tagIds) {
                             listOf(2) -> R.drawable.type_without_meat
@@ -68,25 +91,29 @@ fun ItemCard(
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 12.dp, end = 12.dp, bottom = 12.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+                .padding(
+                    start = dimensionResource(id = R.dimen.padding_12),
+                    end = dimensionResource(id = R.dimen.padding_12),
+                    bottom = dimensionResource(id = R.dimen.padding_12)
+                ),
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_12))
         ) {
             Column(
                 modifier = Modifier.fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
+                verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_4))
             ) {
                 Text(
                     text = product.name,
-                    fontSize = 16.sp,
+                    fontSize = dimensionResource(id = R.dimen.font_size_16).value.sp,
                     fontWeight = FontWeight.Medium,
-                    lineHeight = 16.sp
+                    lineHeight = dimensionResource(id = R.dimen.font_size_16).value.sp
                 )
                 Text(
                     modifier = Modifier.alpha(0.6f),
                     text = "${product.measure} ${product.measureUnit}",
-                    fontSize = 16.sp,
+                    fontSize = dimensionResource(id = R.dimen.font_size_16).value.sp,
                     fontWeight = FontWeight.Medium,
-                    lineHeight = 20.sp
+                    lineHeight = dimensionResource(id = R.dimen.font_size_20).value.sp
                 )
             }
             if (viewModel.shoppingCart.value.find { it.product == product } != null) {

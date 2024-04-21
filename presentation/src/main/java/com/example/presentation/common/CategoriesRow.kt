@@ -11,10 +11,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.model.Category
+import com.example.presentation.R
 import com.example.presentation.catalog_screen.CatalogScreenViewModel
 import com.example.presentation.theme.Dark
 import com.example.presentation.theme.Primary
@@ -25,8 +27,14 @@ fun CategoriesRow(
     viewModel: CatalogScreenViewModel,
 ) {
     LazyRow(
-        modifier = Modifier.padding(start = 16.dp, top = 8.dp, bottom = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp),) {
+        modifier = Modifier.padding(
+            start = dimensionResource(id = R.dimen.main_padding),
+            top = dimensionResource(id = R.dimen.half_padding),
+            bottom = dimensionResource(id = R.dimen.half_padding)
+        ),
+        horizontalArrangement = Arrangement.spacedBy(
+            dimensionResource(id = R.dimen.half_padding))
+        ) {
         items(categories.size) { category ->
             androidx.compose.material3.Button(
                 onClick = {
@@ -35,7 +43,7 @@ fun CategoriesRow(
                 colors = ButtonDefaults.buttonColors(
                     if (viewModel.categoryId.value == categories[category].id) Primary else Color.White
                 ),
-                shape = RoundedCornerShape(8.dp),
+                shape = RoundedCornerShape(dimensionResource(id = R.dimen.half_padding)),
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(40.dp),
@@ -45,7 +53,7 @@ fun CategoriesRow(
                     color =
                     if (viewModel.categoryId.value == categories[category].id) Color.White
                     else Dark,
-                    fontSize = 16.sp,
+                    fontSize = dimensionResource(id = R.dimen.font_size_16).value.sp,
                     textAlign = TextAlign.Center,
                 )
             }

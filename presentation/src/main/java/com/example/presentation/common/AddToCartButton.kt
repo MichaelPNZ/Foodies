@@ -14,12 +14,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.model.Product
+import com.example.presentation.R
 import com.example.presentation.catalog_screen.CatalogScreenViewModel
 import com.example.presentation.theme.Dark
 import com.example.utils.Constants
@@ -32,21 +33,21 @@ fun AddToCartButton(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .background(Color.White, RoundedCornerShape(8.dp))
-            .padding(12.dp)
+            .background(Color.White, RoundedCornerShape(dimensionResource(id = R.dimen.half_padding)))
+            .padding(dimensionResource(id = R.dimen.padding_12))
             .clickable {
                 viewModel.addToShoppingCart(product)
             },
         contentAlignment = Alignment.Center
     ) {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.half_padding)),
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = "${product.priceCurrent} ${Constants.RUR}",
                 color = Dark,
-                fontSize = 16.sp,
+                fontSize = dimensionResource(id = R.dimen.font_size_16).value.sp,
                 fontWeight = FontWeight.SemiBold
             )
             if (product.priceOld != 0) {
@@ -54,7 +55,7 @@ fun AddToCartButton(
                     modifier = Modifier.alpha(0.6f),
                     text = "${product.priceOld} ${Constants.RUR}",
                     color = Dark,
-                    fontSize = 16.sp,
+                    fontSize = dimensionResource(id = R.dimen.font_size_16).value.sp,
                     style = TextStyle(textDecoration = TextDecoration.LineThrough)
                 )
             }
