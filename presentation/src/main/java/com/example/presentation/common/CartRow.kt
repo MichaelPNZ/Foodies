@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -46,10 +47,10 @@ fun CartRow(
         modifier = Modifier
             .height(130.dp)
             .fillMaxWidth()
-            .padding(16.dp)
+            .padding(dimensionResource(id = R.dimen.main_padding))
             .background(Color.White)
             .clickable { navigateToDetail(product.id) },
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.main_padding)),
     ) {
         Box(
             modifier = Modifier
@@ -65,8 +66,11 @@ fun CartRow(
             if (product.tagIds.isNotEmpty()) {
                 Image(
                     modifier = Modifier
-                        .size(24.dp)
-                        .padding(start = 8.dp, top = 8.dp),
+                        .size(dimensionResource(id = R.dimen.padding_24))
+                        .padding(
+                            start = dimensionResource(id = R.dimen.half_padding),
+                            top = dimensionResource(id = R.dimen.half_padding)
+                        ),
                     painter = painterResource(
                         id = when (product.tagIds) {
                             listOf(2) -> R.drawable.type_without_meat
@@ -81,7 +85,7 @@ fun CartRow(
 
         Column(
             modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_12))
         ) {
             Text(
                 modifier = Modifier
@@ -89,31 +93,39 @@ fun CartRow(
                 text = product.name,
                 color = Dark,
                 maxLines = 2,
-                fontSize = 14.sp,
-                lineHeight = 20.sp
+                fontSize = dimensionResource(id = R.dimen.font_size_16).value.sp,
+                lineHeight = dimensionResource(id = R.dimen.font_size_20).value.sp
             )
 
             Row(
                 modifier = Modifier
                     .weight(1f)
                     .fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                horizontalArrangement = Arrangement.spacedBy(
+                    dimensionResource(id = R.dimen.main_padding)
+                )
             ) {
                 Row(
                     modifier = Modifier
                         .background(Color.Transparent)
                         .height(46.dp),
-                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(
+                        dimensionResource(id = R.dimen.padding_12)
+                    ),
                 ) {
                     Box(
                         modifier = Modifier
                             .fillMaxHeight()
                             .aspectRatio(1f)
-                            .background(GrayBg, RoundedCornerShape(8.dp))
+                            .background(
+                                GrayBg, RoundedCornerShape(
+                                    dimensionResource(id = R.dimen.padding_12)
+                                )
+                            )
                     ) {
                         Image(
                             modifier = Modifier
-                                .padding(8.dp)
+                                .padding(dimensionResource(id = R.dimen.half_padding))
                                 .fillMaxSize()
                                 .clickable {
                                     viewModel.deleteFromShoppingCart(product)
@@ -126,7 +138,7 @@ fun CartRow(
 
                     Text(
                         modifier = Modifier
-                            .padding(horizontal = 12.dp)
+                            .padding(horizontal = dimensionResource(id = R.dimen.padding_12))
                             .align(Alignment.CenterVertically),
                         text = viewModel.getProductCount(product).toString(),
                         textAlign = TextAlign.Center,
@@ -137,11 +149,15 @@ fun CartRow(
                         modifier = Modifier
                             .fillMaxHeight()
                             .aspectRatio(1f)
-                            .background(GrayBg, RoundedCornerShape(8.dp))
+                            .background(
+                                GrayBg, RoundedCornerShape(
+                                    dimensionResource(id = R.dimen.half_padding)
+                                )
+                            )
                     ) {
                         Image(
                             modifier = Modifier
-                                .padding(8.dp)
+                                .padding(dimensionResource(id = R.dimen.half_padding))
                                 .fillMaxSize()
                                 .clickable {
                                     viewModel.addToShoppingCart(product)
@@ -161,16 +177,16 @@ fun CartRow(
                     Text(
                         text = product.priceCurrent.toString(),
                         fontWeight = FontWeight.Medium,
-                        fontSize = 16.sp,
-                        lineHeight = 24.sp,
+                        fontSize = dimensionResource(id = R.dimen.font_size_16).value.sp,
+                        lineHeight = dimensionResource(id = R.dimen.font_size_24).value.sp,
                         textAlign = TextAlign.End
                     )
                     if (product.priceOld != 0) {
                         Text(
                             modifier = Modifier.alpha(0.6f),
                             text = product.priceOld.toString(),
-                            fontSize = 14.sp,
-                            lineHeight = 20.sp,
+                            fontSize = dimensionResource(id = R.dimen.font_size_14).value.sp,
+                            lineHeight = dimensionResource(id = R.dimen.font_size_20).value.sp,
                             style = TextStyle(textDecoration = TextDecoration.LineThrough)
                         )
                     }

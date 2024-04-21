@@ -12,11 +12,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.domain.model.Tag
+import com.example.presentation.R
 import com.example.presentation.catalog_screen.CatalogScreenViewModel
 import com.example.presentation.theme.Primary
 
@@ -35,15 +36,15 @@ fun FilterItem(
                 },
                 role = Role.Checkbox
             )
-            .padding(vertical = 12.dp),
+            .padding(vertical = dimensionResource(id = R.dimen.padding_12)),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.half_padding))
     ) {
         Text(
             text = tag.name,
             fontWeight = FontWeight.Normal,
-            fontSize = 16.sp,
-            lineHeight = 24.sp,
+            fontSize = dimensionResource(id = R.dimen.font_size_16).value.sp,
+            lineHeight = dimensionResource(id = R.dimen.font_size_24).value.sp,
             modifier = Modifier.weight(1f)
         )
 

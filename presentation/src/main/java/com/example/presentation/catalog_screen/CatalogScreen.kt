@@ -1,47 +1,37 @@
 package com.example.presentation.catalog_screen
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.presentation.R
 import com.example.presentation.common.Button
 import com.example.presentation.common.CategoriesRow
-import com.example.presentation.common.FilterItem
+import com.example.presentation.common.FilterBottomSheet
 import com.example.presentation.common.ItemCard
+import com.example.presentation.common.SearchBar
 import com.example.presentation.common.TopLine
-import com.example.presentation.theme.Primary
-import kotlinx.coroutines.launch
+import com.example.presentation.common.ZeroResultText
 
 @Composable
 fun CatalogScreen(
@@ -60,7 +50,6 @@ fun CatalogScreen(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CatalogScreenContent(
     categoriesState: State<CatalogScreenState?>,
@@ -68,21 +57,32 @@ fun CatalogScreenContent(
     navigateToDetail: (id: Int) -> Unit,
     navigateToShoppingCart: () -> Unit,
 ) {
-    val sheetState = rememberModalBottomSheetState()
-    val scope = rememberCoroutineScope()
     var showBottomSheet by remember { mutableStateOf(false) }
+    var isSearch by remember { mutableStateOf(false) }
+    var searchQuery by rememberSaveable { mutableStateOf("") }
 
     Scaffold(
         topBar = {
-            TopLine(viewModel = viewModel) {
-                showBottomSheet = true
+            if (!isSearch) {
+                TopLine(
+                    viewModel = viewModel,
+                    filterClickAction = { showBottomSheet = true },
+                    searchClickAction = { isSearch = true }
+                )
+            } else {
+                SearchBar(
+                    searchQuery = searchQuery,
+                    newSearchQuery = { newQuery -> searchQuery = newQuery },
+                ) {
+                    isSearch = false
+                }
             }
-        }
+        },
+        containerColor = Color.White
     ) { contentPadding ->
         Column(
             modifier = Modifier
                 .padding(contentPadding)
-                .background(Color.White)
                 .fillMaxSize(),
         ) {
             when (val currentState = categoriesState.value) {
@@ -99,18 +99,11 @@ fun CatalogScreenContent(
                 }
 
                 is CatalogScreenState.Error -> {
-                    Box(
-                        modifier = Modifier
-                            .padding(contentPadding)
-                            .fillMaxSize(),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Text(text = "Error loading data")
-                    }
+                    ZeroResultText(text = stringResource(id = R.string.Error_loading_data))
                 }
 
                 is CatalogScreenState.CatalogState -> {
-                    if (currentState.catalog != null) {
+                    if (currentState.catalog != null && !isSearch) {
                         Column(
                             modifier = Modifier
                                 .fillMaxSize(),
@@ -130,8 +123,10 @@ fun CatalogScreenContent(
                                     LazyVerticalGrid(
                                         modifier = Modifier.fillMaxSize(),
                                         columns = GridCells.Fixed(2),
-                                        verticalArrangement = Arrangement.spacedBy(8.dp),
-                                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                        verticalArrangement = Arrangement.spacedBy(
+                                            dimensionResource(id = R.dimen.half_padding)),
+                                        horizontalArrangement = Arrangement.spacedBy(
+                                            dimensionResource(id = R.dimen.half_padding)),
                                     ) {
                                         items(items = viewModel.getFilteredProductList(
                                             currentState.catalog.productList)
@@ -144,12 +139,8 @@ fun CatalogScreenContent(
                                         }
                                     }
                                 } else {
-                                    Text(
-                                        modifier = Modifier.align(Alignment.Center),
-                                        text = "Таких блюд нет :(\n" +
-                                                "Попробуйте изменить фильтры",
-                                        fontSize = 16.sp,
-                                        lineHeight = 24.sp,
+                                    ZeroResultText(
+                                        text = stringResource(id = R.string.Zero_filter)
                                     )
                                 }
                             }
@@ -160,61 +151,47 @@ fun CatalogScreenContent(
                                 }
                             }
                         }
+                    } else {
+                        if (searchQuery.isNotEmpty() && currentState.catalog != null) {
+                            val filteredProductList = viewModel.getSearchProduct(
+                                searchQuery,
+                                currentState.catalog.productList
+                            )
+
+                            if (filteredProductList.isNotEmpty()) {
+                                LazyVerticalGrid(
+                                    modifier = Modifier.fillMaxSize(),
+                                    columns = GridCells.Fixed(2),
+                                    verticalArrangement = Arrangement.spacedBy(
+                                        dimensionResource(id = R.dimen.half_padding)),
+                                    horizontalArrangement = Arrangement.spacedBy(
+                                        dimensionResource(id = R.dimen.half_padding)),
+                                ) {
+                                    items(
+                                        items = viewModel.getSearchProduct(
+                                            searchQuery,
+                                            currentState.catalog.productList)
+                                    ) {
+                                        ItemCard(
+                                            product = it,
+                                            viewModel = viewModel,
+                                            navigateToDetail = navigateToDetail,
+                                        )
+                                    }
+                                }
+                            } else {
+                                ZeroResultText(text = stringResource(id = R.string.Zero_filtered_result))
+                            }
+                        } else {
+                            ZeroResultText(text = stringResource(id = R.string.Enter_product_name))
+                        }
                     }
                 }
                 null -> TODO()
             }
             if (showBottomSheet) {
-                ModalBottomSheet(
-                    onDismissRequest = {
-                        showBottomSheet = false
-                    },
-                    sheetState = sheetState,
-                    containerColor = Color.White,
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .padding(start = 24.dp, end = 24.dp, bottom = 32.dp)
-                    ) {
-                        Text(
-                            text = "Подобрать блюда",
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Medium,
-                            lineHeight = 24.sp
-                        )
-                        Spacer(modifier = Modifier.height(16.dp))
-
-                        viewModel.tagList.value.forEachIndexed { index, tag ->
-                            FilterItem(
-                                tag = tag,
-                                viewModel = viewModel
-                            )
-                            if (index < viewModel.tagList.value.size - 1) {
-                                HorizontalDivider()
-                            }
-                        }
-
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .background(Primary, RoundedCornerShape(8.dp))
-                                .clickable {
-                                    scope.launch {
-                                        sheetState.hide()
-                                        showBottomSheet = false
-                                    }
-                                }
-                        ) {
-                            Text(
-                                modifier = Modifier.padding(16.dp),
-                                text = "Готово",
-                                fontSize = 16.sp,
-                                fontWeight = FontWeight.Medium,
-                                color = Color.White,
-                            )
-                        }
-                    }
+                FilterBottomSheet(viewModel = viewModel) {
+                    showBottomSheet = it
                 }
             }
         }

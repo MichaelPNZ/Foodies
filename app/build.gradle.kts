@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.ksp)
     id ("dagger.hilt.android.plugin")
     id ("kotlin-parcelize")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -90,6 +91,11 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
     //Lottie
     implementation(libs.lottie.compose)
+    //Firebase
+    implementation(libs.play.services.auth)
+    implementation(libs.firebase.auth)
+    //Coil
+    implementation(libs.coil.compose)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

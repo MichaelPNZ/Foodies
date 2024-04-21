@@ -5,7 +5,7 @@ import androidx.room.Room
 import com.example.foodies.data.network.ApiService
 import com.example.foodies.data.local.AppDatabase
 import com.example.foodies.data.local.dao.CatalogDao
-import com.example.foodies.data.local.dao.ShoppingCartDao
+import com.example.foodies.data.local.dao.UserDao
 import com.example.utils.Constants
 import com.example.utils.Constants.NAME_DATABASE
 import com.google.gson.GsonBuilder
@@ -90,10 +90,9 @@ object AppModule {
     fun provideCatalogDao(appDatabase: AppDatabase): CatalogDao {
         return appDatabase.catalogDao
     }
-
     @Provides
     @Singleton
-    fun provideShoppingCartDao(appDatabase: AppDatabase): ShoppingCartDao {
-        return appDatabase.shoppingCartDao
+    fun provideUserDao(appDatabase: AppDatabase): UserDao {
+        return appDatabase.userDao
     }
 }

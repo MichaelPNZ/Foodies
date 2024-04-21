@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="Sign_in_with_Google">Sign in with Google</string>
+    <string name="Error_loading_data">Error loading data</string>
+    <string name="Zero_filter">Таких блюд нет :(\nПопробуйте изменить фильтры</string>
+    <string name="Zero_filtered_result">Ничего не нашлось :(</string>
+    <string name="Enter_product_name">Введите название блюда,\nкоторое ищете</string>
+</resources>

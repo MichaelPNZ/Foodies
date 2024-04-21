@@ -1,6 +1,5 @@
 package com.example.presentation.detail_screen
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -157,7 +156,6 @@ fun DetailScreen(
                     ),
                     onClick = {
                         viewModel.addToShoppingCart(selectedProduct!!)
-                        Log.i("!!!", "${viewModel.shoppingCart.value}")
                     }
                 ) {
                     Text(
@@ -204,7 +202,6 @@ fun CounterBig(
                     .fillMaxSize()
                     .clickable {
                         viewModel.deleteFromShoppingCart(product)
-                        Log.i("!!!", "${viewModel.shoppingCart.value}")
                     },
                 painter = painterResource(id = R.drawable.minus),
                 contentDescription = null,
@@ -235,8 +232,6 @@ fun CounterBig(
                     .fillMaxSize()
                     .clickable {
                         viewModel.addToShoppingCart(product)
-                        Log.i("!!!", "${viewModel.shoppingCart.value}")
-
                     },
                 painter = painterResource(id = R.drawable.plus),
                 contentDescription = null,

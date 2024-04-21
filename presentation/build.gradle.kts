@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.ksp)
     id ("dagger.hilt.android.plugin")
+    id("com.google.gms.google-services")
 }
 
 android {
@@ -41,6 +42,7 @@ android {
 }
 
 dependencies {
+    implementation(project(":auth"))
     implementation(project(":domain"))
     implementation(project(":utils"))
 
@@ -61,6 +63,13 @@ dependencies {
 
     //Lottie
     implementation(libs.lottie.compose)
+
+    //Firebase
+    implementation(libs.play.services.auth)
+    implementation(libs.firebase.auth)
+
+    //Coil
+    implementation(libs.coil.compose)
 
     implementation(libs.androidx.ui)
     implementation(libs.androidx.ui.graphics)
