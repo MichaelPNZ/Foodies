@@ -159,10 +159,18 @@ fun Navigation(googleAuthUIClient: GoogleAuthUIClient, navController: NavHostCon
             CatalogScreen(
                 viewModel = catalogViewModel,
                 navigateToDetail = { foodId ->
-                    navController.navigate(NavigationObject.DetailScreen.createRoute(foodId))
+                    navController.navigate(NavigationObject.DetailScreen.createRoute(foodId)) {
+                        popUpTo(NavigationItem.CatalogScreen.route) { inclusive = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 },
                 navigateToShoppingCart = {
-                    navController.navigate(NavigationObject.ShoppingCartScreen.route)
+                    navController.navigate(NavigationObject.ShoppingCartScreen.route) {
+                        popUpTo(NavigationItem.CatalogScreen.route) { inclusive = true }
+                        launchSingleTop = true
+                        restoreState = true
+                    }
                 }
             )
         }
