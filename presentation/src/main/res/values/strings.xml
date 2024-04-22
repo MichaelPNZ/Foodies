@@ -5,4 +5,25 @@
     <string name="Zero_filter">Таких блюд нет :(\nПопробуйте изменить фильтры</string>
     <string name="Zero_filtered_result">Ничего не нашлось :(</string>
     <string name="Enter_product_name">Введите название блюда,\nкоторое ищете</string>
+    <string name="Weight">Вес</string>
+    <string name="Energy_value">Энерг. ценность</string>
+    <string name="kcal">ккал</string>
+    <string name="protein">Белки</string>
+    <string name="Fat">Жиры</string>
+    <string name="Carbohydrates">Углеводы</string>
+    <string name="Add_to_cart_for">В корзину за</string>
+    <string name="Favorite">Избранное</string>
+    <string name="Zero_favorite_product">У вас нет избранных блюд :(</string>
+    <string name="Order_List">Список заказа</string>
+    <string name="orders_List">Список заказов</string>
+    <string name="exit">Выйти</string>
+    <string name="cart">Корзина</string>
+    <string name="order_for">Заказать за</string>
+    <string name="order_number">Заказ No</string>
+    <string name="zero_selected_product">Пусто, выберите блюда\nв каталоге :)</string>
+    <string name="count">Кол-во: </string>
+    <string name="sum">Сумма: </string>
+    <string name="enter_without_registration">Войти без регистрации</string>
+    <string name="choose_dishes">Подобрать блюда</string>
+    <string name="complete">Готово</string>
 </resources>

@@ -17,7 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import com.example.domain.model.ShoppingCart
 import com.example.presentation.R
@@ -30,7 +30,7 @@ fun OrderItem(
 ) {
     Row(
         modifier = Modifier
-            .height(130.dp)
+            .height(dimensionResource(id = R.dimen.padding_130))
             .fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.main_padding)),
     ) {
@@ -77,14 +77,14 @@ fun OrderItem(
             )
 
             Text(
-                text = "Кол-во: ${shoppingCartList[index].count} шт.",
+                text = "${stringResource(id = R.string.count)}${shoppingCartList[index].count} шт.",
                 color = Dark,
                 fontSize = dimensionResource(id = R.dimen.font_size_14).value.sp,
                 lineHeight = dimensionResource(id = R.dimen.font_size_20).value.sp
             )
 
             Text(
-                text = "Сумма: ${shoppingCartList[index].product.priceCurrent * shoppingCartList[index].count} ₽",
+                text = "${stringResource(id = R.string.sum)}${shoppingCartList[index].product.priceCurrent * shoppingCartList[index].count} ₽",
                 color = Dark,
                 fontSize = dimensionResource(id = R.dimen.font_size_14).value.sp,
                 lineHeight = dimensionResource(id = R.dimen.font_size_20).value.sp

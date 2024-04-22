@@ -19,6 +19,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.example.presentation.R
@@ -48,7 +49,7 @@ fun FilterBottomSheet(
                 )
         ) {
             Text(
-                text = "Подобрать блюда",
+                text = stringResource(id = R.string.choose_dishes),
                 fontSize = dimensionResource(id = R.dimen.font_size_16).value.sp,
                 fontWeight = FontWeight.Medium,
                 lineHeight = dimensionResource(id = R.dimen.font_size_24).value.sp
@@ -69,8 +70,10 @@ fun FilterBottomSheet(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Primary, RoundedCornerShape(
-                        dimensionResource(id = R.dimen.half_padding))
+                    .background(
+                        Primary, RoundedCornerShape(
+                            dimensionResource(id = R.dimen.half_padding)
+                        )
                     )
                     .clickable {
                         scope.launch {
@@ -81,7 +84,7 @@ fun FilterBottomSheet(
             ) {
                 Text(
                     modifier = Modifier.padding(dimensionResource(id = R.dimen.main_padding)),
-                    text = "Готово",
+                    text = stringResource(id = R.string.complete),
                     fontSize = dimensionResource(id = R.dimen.font_size_16).value.sp,
                     fontWeight = FontWeight.Medium,
                     color = Color.White,

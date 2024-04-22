@@ -26,13 +26,15 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.example.auth.UserData
+import com.example.presentation.R
 import com.example.presentation.theme.Dark
 import com.example.presentation.theme.Primary
 
@@ -54,15 +56,15 @@ fun PersonalAccountScreen(
         if (userData != null) {
             Row(
                 modifier = Modifier
-                    .padding(16.dp)
-                    .height(100.dp)
+                    .padding(dimensionResource(id = R.dimen.main_padding))
+                    .height(dimensionResource(id = R.dimen.padding_100))
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
                 AsyncImage(
                     model = userData.profilePictureUrl,
-                    contentDescription = "Profile picture",
+                    contentDescription = null,
                     modifier = Modifier
                         .fillMaxHeight()
                         .aspectRatio(1f)
@@ -72,7 +74,7 @@ fun PersonalAccountScreen(
                 userData.userName?.let {
                     Text(
                         text = it,
-                        fontSize = 26.sp,
+                        fontSize = dimensionResource(id = R.dimen.font_size_26).value.sp,
                         fontWeight = FontWeight.Bold,
                     )
                 }
@@ -83,13 +85,13 @@ fun PersonalAccountScreen(
             Text(
                 modifier = Modifier
                     .alpha(0.87f),
-                text = "Список заказов",
-                fontSize = 16.sp,
+                text = stringResource(id = R.string.orders_List),
+                fontSize = dimensionResource(id = R.dimen.font_size_16).value.sp,
             )
 
             LazyColumn(
                 modifier = Modifier
-                    .padding(horizontal = 16.dp)
+                    .padding(horizontal = dimensionResource(id = R.dimen.main_padding))
                     .weight(1f)
                     .fillMaxWidth(),
             ) {
@@ -97,15 +99,19 @@ fun PersonalAccountScreen(
                     Box(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .background(Color.White, RoundedCornerShape(8.dp))
-                            .padding(12.dp)
+                            .background(
+                                Color.White, RoundedCornerShape(
+                                    dimensionResource(id = R.dimen.half_padding)
+                                )
+                            )
+                            .padding(dimensionResource(id = R.dimen.padding_12))
                             .clickable { navigateToSoppingCartDetail(index) },
                         contentAlignment = Alignment.CenterStart
                     ) {
                         Text(
-                            text = "Заказ No${index + 1}",
+                            text = "${stringResource(id = R.string.order_number)}${index + 1}",
                             color = Dark,
-                            fontSize = 16.sp,
+                            fontSize = dimensionResource(id = R.dimen.font_size_16).value.sp,
                             fontWeight = FontWeight.SemiBold
                         )
                     }
@@ -117,23 +123,23 @@ fun PersonalAccountScreen(
         BoxWithConstraints(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(16.dp)
+                .padding(dimensionResource(id = R.dimen.main_padding))
         ) {
             Button(
                 modifier = Modifier
                     .fillMaxWidth(constraints.maxWidth.toFloat())
-                    .height(55.dp),
+                    .height(dimensionResource(id = R.dimen.padding_55)),
                 onClick = {
                     onSignOutClick()
                     personalAccountViewModel.signOut()
                 },
-                shape = RoundedCornerShape(12.dp),
+                shape = RoundedCornerShape(dimensionResource(id = R.dimen.padding_12)),
                 colors = ButtonDefaults.buttonColors(Primary),
             ) {
                 Text(
-                    text = "Выйти",
+                    text = stringResource(id = R.string.exit),
                     color = Color.White,
-                    fontSize = 16.sp,
+                    fontSize = dimensionResource(id = R.dimen.font_size_16).value.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
                     maxLines = 1

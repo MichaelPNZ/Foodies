@@ -9,7 +9,9 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import com.example.presentation.R
 import com.example.presentation.common.Header
 import com.example.presentation.common.OrderItem
 
@@ -26,13 +28,13 @@ fun OrderDetailScreen(
             .fillMaxSize()
             .background(Color.White),
     ) {
-        Header(title = "Список заказа") {
+        Header(title = stringResource(id = R.string.Order_List)) {
             navigateBack()
         }
 
         LazyColumn(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(dimensionResource(id = R.dimen.main_padding))
                 .fillMaxSize(),
         ) {
             items(shoppingCartList.size) { index ->

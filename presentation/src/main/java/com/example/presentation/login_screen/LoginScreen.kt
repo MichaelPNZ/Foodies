@@ -23,11 +23,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.auth.SignInState
 import com.example.presentation.R
@@ -55,43 +55,43 @@ fun LoginScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.White)
-            .padding(20.dp),
+            .padding(dimensionResource(id = R.dimen.padding_20)),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
         Button(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(55.dp)
-                .padding(horizontal = 16.dp),
+                .height(dimensionResource(id = R.dimen.padding_55))
+                .padding(horizontal = dimensionResource(id = R.dimen.main_padding)),
             onClick = navigateToCatalogScreen,
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(dimensionResource(id = R.dimen.padding_12)),
             colors = ButtonDefaults.buttonColors(Primary),
         ) {
             Text(
                 modifier = Modifier.weight(1f),
-                text = "Войти без регистрации",
+                text = stringResource(id = R.string.enter_without_registration),
                 color = Color.White,
-                fontSize = 16.sp,
+                fontSize = dimensionResource(id = R.dimen.font_size_16).value.sp,
                 fontWeight = FontWeight.Bold,
                 textAlign = TextAlign.Center,
                 maxLines = 1
             )
         }
-        Spacer(modifier = Modifier.padding(10.dp))
+        Spacer(modifier = Modifier.padding(dimensionResource(id = R.dimen.padding_10)))
         Button(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(55.dp)
-                .padding(horizontal = 16.dp),
+                .height(dimensionResource(id = R.dimen.padding_55))
+                .padding(horizontal = dimensionResource(id = R.dimen.main_padding)),
             onClick = onSignInClick,
-            shape = RoundedCornerShape(12.dp),
+            shape = RoundedCornerShape(dimensionResource(id = R.dimen.padding_12)),
             colors = ButtonDefaults.buttonColors(Primary),
         ) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .padding(dimensionResource(id = R.dimen.half_padding)),
                 horizontalArrangement = Arrangement.Start
             ) {
                 Image(
@@ -104,7 +104,7 @@ fun LoginScreen(
                     modifier = Modifier.weight(1f),
                     text = stringResource(id = R.string.Sign_in_with_Google),
                     color = Color.White,
-                    fontSize = 16.sp,
+                    fontSize = dimensionResource(id = R.dimen.font_size_16).value.sp,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
                     maxLines = 1

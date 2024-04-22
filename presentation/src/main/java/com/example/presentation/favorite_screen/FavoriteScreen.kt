@@ -12,7 +12,9 @@ import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.stringResource
+import com.example.presentation.R
 import com.example.presentation.catalog_screen.CatalogScreenViewModel
 import com.example.presentation.common.Header
 import com.example.presentation.common.ItemCard
@@ -29,16 +31,21 @@ fun FavoriteScreen(
             .fillMaxSize()
             .background(Color.White)
     ) {
-        Header(title = "Избранное") {
+        Header(title = stringResource(id = R.string.Favorite)) {
             navigateBack()
         }
         if (viewModel.favoriteList.value.isNotEmpty()) {
             LazyVerticalGrid(
-                modifier = Modifier.fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = dimensionResource(id = R.dimen.main_padding)),
                 columns = GridCells.Fixed(2),
-                verticalArrangement = Arrangement.spacedBy(8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(
+                    dimensionResource(id = R.dimen.half_padding)
+                ),
+                horizontalArrangement = Arrangement.spacedBy(
+                    dimensionResource(id = R.dimen.half_padding)
+                ),
             ) {
                 items(items = viewModel.favoriteList.value) {
                     ItemCard(
@@ -50,7 +57,7 @@ fun FavoriteScreen(
             }
         } else {
             ZeroResultText(
-                text = "У вас нет избранных блюд :("
+                text = stringResource(id = R.string.Zero_favorite_product)
             )
         }
     }

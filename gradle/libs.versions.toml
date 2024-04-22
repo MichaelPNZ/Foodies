@@ -28,7 +28,7 @@ appcompat = "1.6.1"
 material = "1.11.0"
 googleServices = "4.4.1"
 firebaseAuth = "22.3.1"
-playServicesAuth = "21.0.0"
+playServicesAuth = "21.1.0"
 
 [libraries]
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "coreSplashscreen" }

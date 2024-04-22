@@ -13,6 +13,7 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.sp
 import com.example.presentation.R
 import com.example.presentation.theme.Primary
@@ -53,7 +54,7 @@ fun SearchBar(
         singleLine = true,
         placeholder = {
             Text(
-                "Корзина",
+                stringResource(id = R.string.cart),
                 modifier = Modifier.alpha(0.6f),
                 fontSize = dimensionResource(id = R.dimen.font_size_17).value.sp,
                 lineHeight = dimensionResource(id = R.dimen.font_size_22).value.sp

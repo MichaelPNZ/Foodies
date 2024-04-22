@@ -2,15 +2,12 @@ package com.example.presentation.detail_screen
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -29,15 +26,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.domain.model.Product
 import com.example.presentation.R
 import com.example.presentation.catalog_screen.CatalogScreenViewModel
+import com.example.presentation.common.CounterBig
 import com.example.presentation.common.ListItem
 import com.example.presentation.theme.Dark
 import com.example.presentation.theme.Primary
@@ -58,7 +54,7 @@ fun DetailScreen(
                 .fillMaxSize()
                 .background(Color.White)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
+            verticalArrangement = Arrangement.spacedBy(dimensionResource(id = R.dimen.padding_24))
         ) {
             Box(
                 modifier = Modifier
@@ -84,25 +80,27 @@ fun DetailScreen(
             Column(
                 modifier = Modifier
                     .fillMaxWidth(),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                verticalArrangement = Arrangement.spacedBy(
+                    dimensionResource(id = R.dimen.half_padding)
+                )
             ) {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp),
+                        .padding(horizontal = dimensionResource(id = R.dimen.main_padding)),
                     text = selectedProduct!!.name,
-                    fontSize = 34.sp,
-                    lineHeight = 36.sp,
+                    fontSize = dimensionResource(id = R.dimen.font_size_34).value.sp,
+                    lineHeight = dimensionResource(id = R.dimen.font_size_36).value.sp,
                 )
 
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp)
+                        .padding(dimensionResource(id = R.dimen.main_padding))
                         .alpha(0.6f),
                     text = selectedProduct!!.description,
-                    fontSize = 16.sp,
-                    lineHeight = 24.sp,
+                    fontSize = dimensionResource(id = R.dimen.font_size_16).value.sp,
+                    lineHeight = dimensionResource(id = R.dimen.font_size_24).value.sp,
                 )
             }
 
@@ -112,27 +110,27 @@ fun DetailScreen(
             ) {
                 HorizontalDivider()
                 ListItem(
-                    category = "Вес",
+                    category = stringResource(id = R.string.Weight),
                     measure = selectedProduct!!.measure.toString(),
                     unit = selectedProduct!!.measureUnit
                 )
                 ListItem(
-                    category = "Энерг. ценность",
+                    category = stringResource(id = R.string.Energy_value),
                     measure = selectedProduct!!.energyPer100Grams.toString(),
-                    unit = "ккал"
+                    unit = stringResource(id = R.string.kcal)
                 )
                 ListItem(
-                    category = "Белки",
+                    category = stringResource(id = R.string.protein),
                     measure = selectedProduct!!.proteinsPer100Grams.toString(),
                     unit = selectedProduct!!.measureUnit
                 )
                 ListItem(
-                    category = "Жиры",
+                    category = stringResource(id = R.string.Fat),
                     measure = selectedProduct!!.fatsPer100Grams.toString(),
                     unit = selectedProduct!!.measureUnit
                 )
                 ListItem(
-                    category = "Углеводы",
+                    category = stringResource(id = R.string.Carbohydrates),
                     measure = selectedProduct!!.carbohydratesPer100Grams.toString(),
                     unit = selectedProduct!!.measureUnit
                 )
@@ -146,8 +144,11 @@ fun DetailScreen(
                 Button(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = 16.dp, vertical = 12.dp),
-                    shape = RoundedCornerShape(8.dp),
+                        .padding(
+                            horizontal = dimensionResource(id = R.dimen.main_padding),
+                            vertical = dimensionResource(id = R.dimen.padding_12)
+                        ),
+                    shape = RoundedCornerShape(dimensionResource(id = R.dimen.half_padding)),
                     colors = ButtonColors(
                         containerColor = Primary,
                         contentColor = Color.White,
@@ -159,8 +160,8 @@ fun DetailScreen(
                     }
                 ) {
                     Text(
-                        text = "В корзину за ${selectedProduct!!.priceCurrent} ${Constants.RUR}",
-                        fontSize = 16.sp,
+                        text = "${stringResource(id = R.string.Add_to_cart_for)} ${selectedProduct!!.priceCurrent} ${Constants.RUR}",
+                        fontSize = dimensionResource(id = R.dimen.font_size_16).value.sp,
                         fontWeight = FontWeight.Medium,
                         color = Color.White
                     )
@@ -175,69 +176,6 @@ fun DetailScreen(
             contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator()
-        }
-    }
-}
-
-@Composable
-fun CounterBig(
-    product: Product,
-    viewModel: CatalogScreenViewModel,
-) {
-    Row(
-        modifier = Modifier
-            .background(Color.Transparent)
-            .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 12.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-    ) {
-        Box(
-            modifier = Modifier.height(50.dp)
-                .aspectRatio(1f)
-                .background(Color.White, RoundedCornerShape(8.dp)
-            )
-        ) {
-            Image(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clickable {
-                        viewModel.deleteFromShoppingCart(product)
-                    },
-                painter = painterResource(id = R.drawable.minus),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                colorFilter = ColorFilter.tint(Primary)
-            )
-        }
-
-        Text(
-            modifier = Modifier
-                .padding(horizontal = 12.dp)
-                .align(Alignment.CenterVertically)
-                .weight(1f),
-            text = viewModel.getProductCount(product).toString(),
-            fontSize = 18.sp,
-            fontWeight = FontWeight.Medium,
-            textAlign = TextAlign.Center,
-            color = Color.Black,
-        )
-
-        Box(
-            modifier = Modifier.height(50.dp)
-                .aspectRatio(1f)
-                .background(Color.White, RoundedCornerShape(8.dp))
-        ) {
-            Image(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .clickable {
-                        viewModel.addToShoppingCart(product)
-                    },
-                painter = painterResource(id = R.drawable.plus),
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
-                colorFilter = ColorFilter.tint(Primary)
-            )
         }
     }
 }

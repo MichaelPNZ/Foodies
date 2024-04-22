@@ -1,14 +1,14 @@
 package com.example.foodies.data.repository
 
-import com.example.foodies.data.mapper.toCategory
-import com.example.foodies.data.network.ApiService
 import com.example.domain.model.Catalog
 import com.example.domain.model.Category
 import com.example.domain.model.Product
 import com.example.domain.model.Tag
 import com.example.domain.repository.ProductRepository
+import com.example.foodies.data.mapper.toCategory
 import com.example.foodies.data.mapper.toProduct
 import com.example.foodies.data.mapper.toTag
+import com.example.foodies.data.network.ApiService
 import com.example.utils.LoadResource
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
@@ -26,7 +26,7 @@ class ProductRepositoryImpl @Inject constructor(
                 val categories = apiService.getCategories().map { it.toCategory() }
                 emit(LoadResource.Success(categories))
             } catch (e: Exception) {
-                emit(LoadResource.Error("Ошибка загрузки категорий: ${e.message}"))
+                emit(LoadResource.Error(e.message.toString()))
             }
         }
     }
@@ -37,7 +37,7 @@ class ProductRepositoryImpl @Inject constructor(
                 val tags = apiService.getTags().map { it.toTag() }
                 emit(LoadResource.Success(tags))
             } catch (e: Exception) {
-                emit(LoadResource.Error("Ошибка загрузки тагов: ${e.message}"))
+                emit(LoadResource.Error(e.message.toString()))
             }
         }
     }
@@ -48,7 +48,7 @@ class ProductRepositoryImpl @Inject constructor(
                 val products = apiService.getProducts().map { it.toProduct() }
                 emit(LoadResource.Success(products))
             } catch (e: Exception) {
-                emit(LoadResource.Error("Ошибка загрузки продуктов: ${e.message}"))
+                emit(LoadResource.Error(e.message.toString()))
             }
         }
     }
@@ -77,7 +77,7 @@ class ProductRepositoryImpl @Inject constructor(
                     )
                 }
             } catch (e: Exception) {
-                emit(LoadResource.Error("Ошибка загрузки каталога: ${e.message}"))
+                emit(LoadResource.Error(e.message.toString()))
             }
         }
     }
